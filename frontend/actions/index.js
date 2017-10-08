@@ -7,21 +7,22 @@ export const
 export function addPost({ id, timestamp, title, body, author, category, voteScore, deleted }) {
     return {
         type: ADD_POST,
-        id,
-        timestamp, 
-        title,
-        body,
-        author,
-        category,
-        voteScore,
-        deleted
+        post: {
+            id,
+            timestamp, 
+            title,
+            body,
+            author,
+            category,
+            voteScore,
+            deleted
+        }
     }
 }
 
 export function deletePost({ id }) {
     return {
         type: DELETE_POST,
-        id,
-        deleted: true
+        id
     }
 }
