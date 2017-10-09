@@ -3,27 +3,17 @@ import {
     DELETE_POST
 } from '../actions'
 
-const initialPostState = [
-    {
-        id: '0',
-        timestamp: 'now', 
-        title: 'sample title', 
-        body: 'blablabla', 
-        author:'anonymous', 
-        category: 'react', 
-        voteScore: 2, 
-        deleted: false
-    }
-];
+const initialPostsState = [];
 
-const post = (state = initialPostState, action) => {
-    const { id, timestamp, title, body, author, category, voteScore, deleted } = action
+const post = (state = initialPostsState, action) => {
+    //const { id, timestamp, title, body, author, category, voteScore, deleted } = action
+    const currentPost = action.post;
     
     switch(action.type) {
         case ADD_POST:
-            return [...initialPostState.posts, action.post]
+            return [...state, currentPost]
         case DELETE_POST:
-            return state.posts.filter((post) => post.id !== action.post.id)
+            return state.filter((post) => post.id !== currentPost.id)
         default:
             return state
     }
