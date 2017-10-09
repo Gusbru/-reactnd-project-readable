@@ -21,10 +21,10 @@ class App extends Component {
 
   submitPost = () => {
     this.props.store.dispatch(addPost({
-      id: '1',
+      id: this.input.value,
       timestamp: 'timestamp', 
       title: 'post title',
-      body: this.input.value,
+      body: 'none',
       author: 'author',
       category: 'pick one',
       voteScore: 3,
@@ -35,8 +35,10 @@ class App extends Component {
 
   }
 
-  removePost = () => {
-    console.log("teste_remove")
+  removePost = (id) => {
+    console.log("teste_remove", id)
+    deletePost({id})
+    
   }
 
   render() {
@@ -53,9 +55,9 @@ class App extends Component {
         
         <pre>
           We have a {this.state.postsList && this.state.postsList.map((item) => (
-            <div>
-              <li>{item.body}</li>
-              <button onClick={this.removePost}>X</button>
+            <div key={item.id}>
+              <li>{item.id}</li>
+              <button onClick={() => this.removePost(item.id)}>X</button>
             </div>
           ))}
           {console.log(this.state)}
