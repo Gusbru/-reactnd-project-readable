@@ -3,12 +3,21 @@ import {
     DELETE_POST
 } from '../actions'
 
-const initialPostState = {
-    posts: [],
-}
+const initialPostState = [
+    {
+        id: '0',
+        timestamp: 'now', 
+        title: 'sample title', 
+        body: 'blablabla', 
+        author:'anonymous', 
+        category: 'react', 
+        voteScore: 2, 
+        deleted: false
+    }
+];
 
 const post = (state = initialPostState, action) => {
-    const { id, timestamp, title, body, author, category, voteScore, deleted } = action.post
+    const { id, timestamp, title, body, author, category, voteScore, deleted } = action
     
     switch(action.type) {
         case ADD_POST:
@@ -19,5 +28,6 @@ const post = (state = initialPostState, action) => {
             return state
     }
 }
+
 
 export default post
