@@ -22,6 +22,8 @@ export function addPost({ id, timestamp, title, body, author, category, voteScor
 export function deletePost({ id }) {
     return {
         type: DELETE_POST,
-        id
+        post: {
+            id
+        }
     }
 }

@@ -13,11 +13,10 @@ const post = (state = initialPostsState, action) => {
         case ADD_POST:
             return [...state, currentPost]
         case DELETE_POST:
-            return state.filter((post) => post.id !== currentPost.id)
+            return state.filter((item) => item.id !== currentPost.id)
         default:
             return state
     }
 }
-
 
 export default post

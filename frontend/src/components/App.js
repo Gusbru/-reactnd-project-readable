@@ -36,8 +36,7 @@ class App extends Component {
   }
 
   removePost = (id) => {
-    console.log("teste_remove", id)
-    deletePost({id})
+    this.props.store.dispatch(deletePost({id}))
     
   }
 
@@ -60,7 +59,6 @@ class App extends Component {
               <button onClick={() => this.removePost(item.id)}>X</button>
             </div>
           ))}
-          {console.log(this.state)}
         </pre>
         
         {/* <EnhancedTable /> */}
