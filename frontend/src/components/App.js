@@ -37,7 +37,6 @@ class App extends Component {
 
   removePost = (id) => {
     this.props.store.dispatch(deletePost({id}))
-    
   }
 
   render() {
