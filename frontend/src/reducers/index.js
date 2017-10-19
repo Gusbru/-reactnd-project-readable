@@ -1,30 +1,14 @@
+import { combineReducers } from 'redux';
+
 import {
   ADD_POST,
-  DELETE_POST
+  DELETE_POST, 
+  ADD_COMMENT, 
+  DELETE_COMMENT
 } from '../actions';
 
-const initialPostsState = [
-  {
-    id: '1',
-    timestamp: '3498534', 
-    title: 'post-title',
-    body: 'post body',
-    author: 'post author',
-    category: 'redux',
-    voteScore: 1,
-    deleted: false
-  },
-  {
-    id: '2',
-    timestamp: '3498534', 
-    title: 'post-title',
-    body: 'post body',
-    author: 'post author',
-    category: 'redux',
-    voteScore: 1,
-    deleted: false
-  }
-];
+const initialPostsState = [];
+const initialCommentsState = [];
 
 const post = (state = initialPostsState, action) => {
   //const { id, timestamp, title, body, author, category, voteScore, deleted } = action
@@ -34,10 +18,24 @@ const post = (state = initialPostsState, action) => {
     case ADD_POST:
       return [...state, currentPost];
     case DELETE_POST:
-      return state.filter((item) => item.id !== currentPost.id);
+      return state.posts.filter((item) => item.id !== currentPost.id);
     default:
       return state;
   }
 }
 
-export default post;
+const comment = (state = initialCommentsState, action) => {
+  const currentComment = action.comments;
+
+  switch(action.type) {
+    case ADD_COMMENT:
+      return [...state, currentComment];
+    default:
+      return state;
+  }
+};
+
+export default combineReducers({
+  post,
+  comment
+});
