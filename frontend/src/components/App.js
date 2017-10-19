@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { addPost, deletePost } from '../actions';
 import Modal from 'react-modal';
 import { fetchPosts } from '../utils/api';
+import uuidv1 from 'uuid/v1';
 import './App.css';
 
 const customStyles = {
@@ -21,7 +22,15 @@ const customStyles = {
 class App extends Component {
 
   state = {
-    modalIsOpen: false
+    modalIsOpen: false,
+    id         : '',
+    timestamp  : '', 
+    title      : '',
+    body       : '',
+    author     : '',
+    category   : '',
+    voteScore  : '',
+    deleted    : ''
   };
 
   openModal = () => {
@@ -41,25 +50,28 @@ class App extends Component {
     }))
   }
   
-  includePost = (e) => {
-    if (!this.input.value) {
+  includePost = (event) => {
+    console.log('include post', event.target.value)
+    if (!event.target.value) {
       return;
     }
 
-    e.preventDefault();
+    event.preventDefault();
+
+    const postBody = event.target.value;
 
     this.props.insertPost({
-        id:"bla",
-        timestamp:"bla", 
+        id:uuidv1(),
+        timestamp:Date.now(), 
         title:"bla",
-        body: this.input.value,
+        body: postBody,
         author:"bla",
         category:"bla",
         voteScore:"bla",
         deleted:"bla"
     });
 
-    this.input.value = '';
+    this.setState({ body: '' });
 
     if (this.state.modalIsOpen) {
       this.closeModal();
@@ -71,6 +83,17 @@ class App extends Component {
     this.props.deletePost(
       {}
     )
+  }
+
+  handlePostChange = (event) => {
+    const property = event.target.name;
+    const value = event.target.value;
+    this.setState({ [property] : value });
+  }
+
+  handleOnSubmit = (event) => {
+
+    event.preventDefault();
   }
   
   retrievePosts = () => async (dispatch) => {
@@ -120,24 +143,29 @@ class App extends Component {
           contentLabel='Modal'>
             <div>
               <div>
+                Post Text:
                 <input
                   type='text'
+                  name='body'
                   placeholder='Post text...'
-                  ref={(input) => this.input = input}
+                  value={this.state.body}
+                  onChange={this.handlePostChange}
                 />
               </div>
 
               <div>
                 <button 
-                  onClick={this.includePost}>
+                  onClick={this.includePost}
+                  value={this.state.body}>
                     Post
                 </button>
               
-              <button
-                onClick={this.closeModal}>
-                Cancel
-              </button>
+                <button
+                  onClick={this.closeModal}>
+                  Cancel
+                </button>
               </div>
+
             </div>
         </Modal>
 
