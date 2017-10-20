@@ -15,8 +15,8 @@ export const fetchPosts = () => (
   .catch(err => console.error('Error retrieving posts from server -> ', err))
 )
 
-export const writePost = (data) => (
-  fetch(
+export const writePost = async (data) => (
+  await fetch(
     url + '/posts',
     {
       method: 'POST',
@@ -30,7 +30,7 @@ export const writePost = (data) => (
         title: data.title,
         body: data.body,
         author: data.author,
-        category: data.category
+        category: data.category,
       })
     }
   )

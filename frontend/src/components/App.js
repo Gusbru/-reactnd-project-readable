@@ -7,7 +7,7 @@ import { addPost, deletePost } from '../actions';
 import Modal from 'react-modal';
 import { fetchPosts, writePost } from '../utils/api';
 import uuidv1 from 'uuid/v1';
-import { RadioGroup, RadioButton } from 'react-radio-buttons';
+import Radio from 'material-ui/Radio';
 import './App.css';
 
 const customStyles = {
@@ -31,8 +31,8 @@ class App extends Component {
     body       : '',
     author     : '',
     category   : '',
-    voteScore  : '',
-    deleted    : ''
+    voteScore  : 1,
+    deleted    : false
   };
 
   openModal = () => {
@@ -61,10 +61,10 @@ class App extends Component {
       timestamp : Date.now(), 
       title     : this.state.title,
       body      : this.state.body,
-      author    : "bla",
-      category  : "bla",
-      voteScore : "bla",
-      deleted   : "bla"
+      author    : this.state.author,
+      category  : this.state.category,
+      voteScore : this.state.voteScore,
+      deleted   : this.state.deleted
     }
 
     // insert post to redux-store
@@ -79,7 +79,11 @@ class App extends Component {
       id         : '',
       timestamp  : '', 
       title      : '',
-      body       : '' 
+      body       : '',
+      author     : '',
+      category   : '',
+      voteScore  : 1,
+      deleted    : false,
     });
 
     if (this.state.modalIsOpen) {
@@ -189,13 +193,31 @@ class App extends Component {
 
               <div>
                 Post Text:
-                <input
+                <textarea
                   type='text'
                   name='body'
                   placeholder='Post text...'
                   value={this.state.body}
                   onChange={this.handlePostChange}
                 />
+              </div>
+
+              <div>
+                Author:
+                <input
+                  type='text'
+                  name='author'
+                  placeholder='Author name'
+                  value={this.state.author}
+                  onChange={this.handlePostChange}
+                />
+              </div>
+
+              <div>
+                Category:
+                <Radio name='category' value='react' onChange={this.handlePostChange} />React
+                <Radio name='category' value='redux' onChange={this.handlePostChange} />Redux
+                <Radio name='category' value='udacity' onChange={this.handlePostChange} />Udacity
               </div>
               
 
