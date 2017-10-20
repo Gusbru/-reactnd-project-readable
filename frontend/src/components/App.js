@@ -5,7 +5,7 @@ import PostList from './PostList';
 import { connect } from 'react-redux';
 import { addPost, deletePost } from '../actions';
 import Modal from 'react-modal';
-import { fetchPosts } from '../utils/api';
+import { fetchPosts, writePost } from '../utils/api';
 import uuidv1 from 'uuid/v1';
 import { RadioGroup, RadioButton } from 'react-radio-buttons';
 import './App.css';
@@ -56,19 +56,24 @@ class App extends Component {
 
     event.preventDefault();
 
-    const postBody = this.state.body;
-    const postTitle = this.state.title;
+    const currentPost = {
+      id        : uuidv1(),
+      timestamp : Date.now(), 
+      title     : this.state.title,
+      body      : this.state.body,
+      author    : "bla",
+      category  : "bla",
+      voteScore : "bla",
+      deleted   : "bla"
+    }
 
-    this.props.insertPost({
-        id        : uuidv1(),
-        timestamp : Date.now(), 
-        title     : this.state.title,
-        body      : this.state.body,
-        author    : "bla",
-        category  : "bla",
-        voteScore : "bla",
-        deleted   : "bla"
-    });
+    // insert post to redux-store
+    this.props.insertPost(currentPost);
+
+    // insert post to server
+    console.log('writing post to server');
+    writePost(currentPost);
+    console.log('post written to server');
 
     this.setState({
       id         : '',
