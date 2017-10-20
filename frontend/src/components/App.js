@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 import SimpleAppBar from './AppBar';
 import EnhancedTable from './AppTables';
+import PostList from './PostList';
 import { connect } from 'react-redux';
 import { addPost, deletePost } from '../actions';
 import Modal from 'react-modal';
 import { fetchPosts } from '../utils/api';
 import uuidv1 from 'uuid/v1';
+import { RadioGroup, RadioButton } from 'react-radio-buttons';
 import './App.css';
 
 const customStyles = {
@@ -51,27 +53,29 @@ class App extends Component {
   }
   
   includePost = (event) => {
-    console.log('include post', event.target.value)
-    if (!event.target.value) {
-      return;
-    }
 
     event.preventDefault();
 
-    const postBody = event.target.value;
+    const postBody = this.state.body;
+    const postTitle = this.state.title;
 
     this.props.insertPost({
-        id:uuidv1(),
-        timestamp:Date.now(), 
-        title:"bla",
-        body: postBody,
-        author:"bla",
-        category:"bla",
-        voteScore:"bla",
-        deleted:"bla"
+        id        : uuidv1(),
+        timestamp : Date.now(), 
+        title     : this.state.title,
+        body      : this.state.body,
+        author    : "bla",
+        category  : "bla",
+        voteScore : "bla",
+        deleted   : "bla"
     });
 
-    this.setState({ body: '' });
+    this.setState({
+      id         : '',
+      timestamp  : '', 
+      title      : '',
+      body       : '' 
+    });
 
     if (this.state.modalIsOpen) {
       this.closeModal();
@@ -79,10 +83,16 @@ class App extends Component {
 
   }
 
-  removePost = () => {
-    this.props.deletePost(
-      {}
-    )
+  removePost = (event) => {
+    event.preventDefault();
+
+    const id = event.target.value;
+    console.log('removing postId = ', id);
+    if (!id) {
+      return;
+    }
+
+    this.props.removePost(id);
   }
 
   handlePostChange = (event) => {
@@ -91,30 +101,27 @@ class App extends Component {
     this.setState({ [property] : value });
   }
 
-  handleOnSubmit = (event) => {
-
-    event.preventDefault();
+  handlePostClick = (event) => {
+    console.log(event.className);
+    console.log(event.target.value);
   }
   
   retrievePosts = () => async (dispatch) => {
     console.log('Trying to retrieve the posts...');
     try {
       const posts = await fetchPosts();
-      console.log(posts);
       posts.map((item) => {
         this.props.insertPost(item);
-      })
+      });
+      console.log(this.props.postList);
     } catch(err) {
       console.error("Error retrieving posts...", err)
     }
   }
-
-  
-
   
 
   render() {
-    console.log('Props', this.props);
+    //console.log('Props', this.props);
 
     return (
       <div className="App">
@@ -132,9 +139,31 @@ class App extends Component {
         </div>
 
         <div>
-          {this.props.postList.map((item) => (
-            <li key={item.id}>{item.title}</li>
-          ))}
+          <table>
+            <tbody>
+              <tr>
+                <th>Title</th>
+                <th>Content</th>
+                <th>Category</th>
+                <th>Author</th>
+                <th>Date</th>
+                <th>Score</th>
+                <th>Action</th>
+              </tr>
+
+              {this.props.postList.map((item) => (
+                <tr key={item.id} value={item.id}>
+                  <td>{item.title}</td>
+                  <td>{item.body}</td>
+                  <td>{item.category}</td>
+                  <td>{item.author}</td>
+                  <td>{item.timestamp}</td>
+                  <td>{item.voteScore}</td>
+                  <td><button onClick={this.removePost} value={item.id}>Delete</button></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
 
         <Modal
@@ -142,6 +171,17 @@ class App extends Component {
           onRequestClose={this.closeModal}
           contentLabel='Modal'>
             <div>
+              <div>
+                Title:
+                <input 
+                  type='text'
+                  name='title'
+                  placeholder='Post title...'
+                  value={this.state.title}
+                  onChange={this.handlePostChange}
+                />  
+              </div>
+
               <div>
                 Post Text:
                 <input
@@ -152,16 +192,14 @@ class App extends Component {
                   onChange={this.handlePostChange}
                 />
               </div>
+              
 
               <div>
-                <button 
-                  onClick={this.includePost}
-                  value={this.state.body}>
-                    Post
+                <button onClick={this.includePost}>
+                  Post
                 </button>
               
-                <button
-                  onClick={this.closeModal}>
+                <button onClick={this.closeModal}>
                   Cancel
                 </button>
               </div>
@@ -174,6 +212,7 @@ class App extends Component {
         </div>
 
         {/* <EnhancedTable /> */}
+        {/* <PostList test={this.props.postList}/> */}
       </div>
     );
   }

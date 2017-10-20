@@ -11,14 +11,13 @@ const initialPostsState = [];
 const initialCommentsState = [];
 
 const post = (state = initialPostsState, action) => {
-  //const { id, timestamp, title, body, author, category, voteScore, deleted } = action
   const currentPost = action.post;
     
   switch(action.type) {
     case ADD_POST:
       return [...state, currentPost];
     case DELETE_POST:
-      return state.posts.filter((item) => item.id !== currentPost.id);
+      return state.filter((item) => item.id !== currentPost.id);
     default:
       return state;
   }

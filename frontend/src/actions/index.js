@@ -19,7 +19,7 @@ export const addPost = ({ id, timestamp, title, body, author, category, voteScor
   }
 );
 
-export const deletePost = ({ id }) => (
+export const deletePost = (id) => (
   {
     type: DELETE_POST,
     post: {
