@@ -19,6 +19,7 @@ import Edit from 'material-ui-icons/Edit';
 import Send from 'material-ui-icons/Send';
 import Cancel from 'material-ui-icons/Cancel';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+import Checkbox from 'material-ui/Checkbox';
 import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/Menu/MenuItem';
@@ -131,9 +132,8 @@ class App extends Component {
     });
   }
 
-  handlePostClick = (event) => {
-    console.log('className = ', event.className);
-    console.log(event.target.value);
+  handlePostClick = (event, id) => {
+    console.log(id);
   }
   
   render() {
@@ -157,29 +157,30 @@ class App extends Component {
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell></TableCell>
                 <TableCell>Title</TableCell>
                 {/* <TableCell>Content</TableCell> */}
                 <TableCell>Category</TableCell>
                 <TableCell>Author</TableCell>
                 <TableCell>Date</TableCell>
                 <TableCell>Score</TableCell>
-                <TableCell>Action</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {this.props.postList.map((item) => (
-                  <TableRow key={item.id} value={item.id}>
+                  <TableRow 
+                    key={item.id} 
+                    value={item.id}
+                    hover
+                    onClick={event => this.handlePostClick(event, item.id)}
+                    role="checkbox" >
+                    <TableCell padding="checkbox"><Checkbox /></TableCell>
                     <TableCell>{item.title}</TableCell>
                     {/* <TableCell>{item.body}</TableCell> */}
                     <TableCell>{item.category}</TableCell>
                     <TableCell>{item.author}</TableCell>
                     <TableCell>{item.timestamp}</TableCell>
                     <TableCell>{item.voteScore}</TableCell>
-                    <TableCell>
-                      {/* <button onClick={this.removePost} value={item.id}>Delete</button> */}
-                      <Button color="primary" aria-label="add" value={item.id}><Edit /></Button>
-                      <Button color="primary" aria-label="add" value={item.id}><DeleteForever /></Button>
-                    </TableCell>
                   </TableRow>
                 ))}
             </TableBody>
