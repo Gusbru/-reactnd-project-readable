@@ -3,11 +3,25 @@ import SimpleAppBar from './AppBar';
 import EnhancedTable from './AppTables';
 import PostList from './PostList';
 import { connect } from 'react-redux';
-import { addPost, deletePost } from '../actions';
+import { addPost, 
+         deletePost,
+         retrievePosts 
+        } from '../actions';
 import Modal from 'react-modal';
 import { fetchPosts, writePost } from '../utils/api';
 import uuidv1 from 'uuid/v1';
 import Radio from 'material-ui/Radio';
+import { withStyles } from 'material-ui/styles';
+import Button from 'material-ui/Button';
+import AddIcon from 'material-ui-icons/Add';
+import DeleteForever from 'material-ui-icons/DeleteForever'
+import Edit from 'material-ui-icons/Edit';
+import Send from 'material-ui-icons/Send';
+import Cancel from 'material-ui-icons/Cancel';
+import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+import Paper from 'material-ui/Paper';
+import TextField from 'material-ui/TextField';
+import MenuItem from 'material-ui/Menu/MenuItem';
 import './App.css';
 
 const customStyles = {
@@ -34,6 +48,11 @@ class App extends Component {
     voteScore  : 1,
     deleted    : false
   };
+
+  componentDidMount() {
+    console.log("component did mount");
+    this.props.retrievePosts();
+  }
 
   openModal = () => {
     this.setState(() => ({
@@ -95,6 +114,8 @@ class App extends Component {
   removePost = (event) => {
     event.preventDefault();
 
+    console.log(event);
+
     const id = event.target.value;
     console.log('removing postId = ', id);
     if (!id) {
@@ -104,31 +125,17 @@ class App extends Component {
     this.props.removePost(id);
   }
 
-  handlePostChange = (event) => {
-    const property = event.target.name;
-    const value = event.target.value;
-    this.setState({ [property] : value });
+  handlePostChange = name => event => {
+    this.setState({ 
+      [name] : event.target.value 
+    });
   }
 
   handlePostClick = (event) => {
-    console.log(event.className);
+    console.log('className = ', event.className);
     console.log(event.target.value);
   }
   
-  retrievePosts = () => async (dispatch) => {
-    console.log('Trying to retrieve the posts...');
-    try {
-      const posts = await fetchPosts();
-      posts.map((item) => {
-        this.props.insertPost(item);
-      });
-      console.log(this.props.postList);
-    } catch(err) {
-      console.error("Error retrieving posts...", err)
-    }
-  }
-  
-
   render() {
     // console.log('Props', this.props);
 
@@ -141,105 +148,109 @@ class App extends Component {
         </p>
 
         <div>
-          <button
-            onClick={this.openModal}>
-            Create New Post
-          </button>
+          <Button fab color="primary" aria-label="add" onClick={this.openModal}>
+            <AddIcon />
+          </Button>
         </div>
 
-        <div>
-          <table>
-            <tbody>
-              <tr>
-                <th>Title</th>
-                <th>Content</th>
-                <th>Category</th>
-                <th>Author</th>
-                <th>Date</th>
-                <th>Score</th>
-                <th>Action</th>
-              </tr>
-
+        <Paper>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Title</TableCell>
+                {/* <TableCell>Content</TableCell> */}
+                <TableCell>Category</TableCell>
+                <TableCell>Author</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Score</TableCell>
+                <TableCell>Action</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
               {this.props.postList.map((item) => (
-                <tr key={item.id} value={item.id}>
-                  <td>{item.title}</td>
-                  <td>{item.body}</td>
-                  <td>{item.category}</td>
-                  <td>{item.author}</td>
-                  <td>{item.timestamp}</td>
-                  <td>{item.voteScore}</td>
-                  <td><button onClick={this.removePost} value={item.id}>Delete</button></td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+                  <TableRow key={item.id} value={item.id}>
+                    <TableCell>{item.title}</TableCell>
+                    {/* <TableCell>{item.body}</TableCell> */}
+                    <TableCell>{item.category}</TableCell>
+                    <TableCell>{item.author}</TableCell>
+                    <TableCell>{item.timestamp}</TableCell>
+                    <TableCell>{item.voteScore}</TableCell>
+                    <TableCell>
+                      {/* <button onClick={this.removePost} value={item.id}>Delete</button> */}
+                      <Button color="primary" aria-label="add" value={item.id}><Edit /></Button>
+                      <Button color="primary" aria-label="add" value={item.id}><DeleteForever /></Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </Paper>
+        
 
         <Modal
           isOpen={this.state.modalIsOpen}
           onRequestClose={this.closeModal}
           contentLabel='Modal'>
             <div>
+            <div>
+                <Button color="primary" aria-label="add" onClick={this.includePost}>
+                  <Send />
+                </Button>
+
+                <Button color="primary" aria-label="add" onClick={this.closeModal}>
+                  <Cancel />
+                </Button>
+              </div>
               <div>
-                Title:
-                <input 
-                  type='text'
+                <TextField
+                  id='title'
                   name='title'
-                  placeholder='Post title...'
+                  label='Post Title'
                   value={this.state.title}
-                  onChange={this.handlePostChange}
-                />  
-              </div>
-
-              <div>
-                Post Text:
-                <textarea
-                  type='text'
+                  onChange={this.handlePostChange('title')}
+                  margin="normal"
+                  fullWidth
+                />
+                <TextField 
+                  id='body'
                   name='body'
-                  placeholder='Post text...'
+                  label='Post text...'
+                  multiline
+                  fullWidth
+                  rows="4"
+                  margin="normal"
                   value={this.state.body}
-                  onChange={this.handlePostChange}
+                  onChange={this.handlePostChange('body')}
                 />
-              </div>
-
-              <div>
-                Author:
-                <input
-                  type='text'
+                <TextField 
+                  id='author'
                   name='author'
-                  placeholder='Author name'
+                  label='Author Name'
                   value={this.state.author}
-                  onChange={this.handlePostChange}
+                  onChange={this.handlePostChange('author')}
                 />
+                <TextField 
+                  id='category'
+                  name='category'
+                  select
+                  label='Category:'
+                  value={this.state.category}
+                  onChange={this.handlePostChange('category')}
+                  SelectProps={{
+                    MenuProps: {
+                      className: "category",
+                    },
+                  }}
+                  helperText="Please select a category"
+                  margin="normal"
+                >
+                 <MenuItem key="react" name="category" value='react'>React</MenuItem> 
+                 <MenuItem key="redux" name="category" value='redux'>Redux</MenuItem> 
+                 <MenuItem key="udacity" name="category" value='udacity'>Udacity</MenuItem> 
+                </TextField>
               </div>
-
-              <div>
-                Category:
-                <Radio name='category' value='react' onChange={this.handlePostChange} />React
-                <Radio name='category' value='redux' onChange={this.handlePostChange} />Redux
-                <Radio name='category' value='udacity' onChange={this.handlePostChange} />Udacity
-              </div>
-              
-
-              <div>
-                <button onClick={this.includePost}>
-                  Post
-                </button>
-              
-                <button onClick={this.closeModal}>
-                  Cancel
-                </button>
-              </div>
-
             </div>
         </Modal>
-
-        <div>
-          <button onClick={this.retrievePosts()}>fetch</button>
-        </div>
-
-        {/* <EnhancedTable /> */}
-        {/* <PostList test={this.props.postList}/> */}
       </div>
     );
   }
@@ -256,7 +267,8 @@ const mapStateToProps = (postList) => (
 const mapDispatchToProps = (dispatch) => (
   {
     insertPost: (data) => dispatch(addPost(data)),
-    removePost: (id) => dispatch(deletePost(id))
+    removePost: (id) => dispatch(deletePost(id)),
+    retrievePosts: () => dispatch(retrievePosts())
   }
 )
 
