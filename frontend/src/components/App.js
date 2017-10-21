@@ -130,7 +130,7 @@ class App extends Component {
   
 
   render() {
-    //console.log('Props', this.props);
+    // console.log('Props', this.props);
 
     return (
       <div className="App">
@@ -246,10 +246,10 @@ class App extends Component {
 }
 
 // connect component to redux Store
-const mapStateToProps = (postList, commentList) => (
+const mapStateToProps = (postList) => (
   {
-    postList: postList.post,
-    commentList: postList.comment
+    postList: postList.postActions.posts,
+    // commentList: postList.comment
   }
 )
 

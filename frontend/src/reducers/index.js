@@ -7,34 +7,47 @@ import {
   DELETE_COMMENT
 } from '../actions';
 
-const initialPostsState = [];
-const initialCommentsState = [];
+// const initialPostsState = [];
+// const initialCommentsState = [];
 
-const post = (state = initialPostsState, action) => {
+const initialState = {
+  users: {},
+  modal: {},
+  posts: [],
+  replies: {},
+  listeners: {}
+}
+
+
+const postActions = (state = initialState, action) => {
   const currentPost = action.post;
+  let posts = [];
     
   switch(action.type) {
     case ADD_POST:
-      return [...state, currentPost];
+      // return [...state, currentPost];
+      posts = [...state.posts, currentPost];
+      return {...state, posts}
     case DELETE_POST:
-      return state.filter((item) => item.id !== currentPost.id);
-    default:
-      return state;
-  }
-}
-
-const comment = (state = initialCommentsState, action) => {
-  const currentComment = action.comments;
-
-  switch(action.type) {
-    case ADD_COMMENT:
-      return [...state, currentComment];
+      posts = state.posts.filter((item) => item.id !== currentPost.id)
+      return {...state, posts};
     default:
       return state;
   }
 };
 
+// const comment = (state = initialCommentsState, action) => {
+//   const currentComment = action.comments;
+
+//   switch(action.type) {
+//     case ADD_COMMENT:
+//       return [...state, currentComment];
+//     default:
+//       return state;
+//   }
+// };
+
 export default combineReducers({
-  post,
-  comment
+  postActions,
+  // comment
 });
