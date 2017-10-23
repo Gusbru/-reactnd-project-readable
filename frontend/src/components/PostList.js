@@ -24,7 +24,9 @@ const PostList = (props) => (
       </TableRow>
     </TableHead>
     <TableBody>
-      {props.postList.map((item) => (
+      {props.postList
+      .filter(_ => _.category === props.filterCategory || props.filterCategory === 'all')
+      .map((item) => (
           <TableRow 
             key={item.id} 
             value={item.id}

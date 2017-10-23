@@ -51,7 +51,7 @@ class App extends Component {
     deleted    : false
   };
 
-  componentDidMount() {
+  componentWillMount() {
     console.log("component did mount");
     this.props.retrievePosts();
   }
@@ -157,9 +157,21 @@ class App extends Component {
         </div>
 
         <Route exact path='/' render={() => (
-          <PostList handlePostClick={this.handlePostClick} filter={"all"}/>
+          <PostList handlePostClick={this.handlePostClick} filterCategory={"all"}/>
         )}/>
 
+        {/* TODO: loop over all categories */}
+        <Route exact path='/udacity' render={() => (
+          <PostList handlePostClick={this.handlePostClick} filterCategory={"udacity"}/>
+        )}/>
+
+        <Route exact path='/react' render={() => (
+          <PostList handlePostClick={this.handlePostClick} filterCategory={"react"}/>
+        )}/>
+
+        <Route exact path='/redux' render={() => (
+          <PostList handlePostClick={this.handlePostClick} filterCategory={"redux"}/>
+        )}/>
         
         
 
