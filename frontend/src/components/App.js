@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import SimpleAppBar from './AppBar';
+import { Route } from 'react-router-dom';
 import EnhancedTable from './AppTables';
 import PostList from './PostList';
 import { connect } from 'react-redux';
@@ -141,51 +142,25 @@ class App extends Component {
 
     return (
       <div className="App">
+
         <SimpleAppBar title="My Posts"/>
 
         <p>
           We have {this.props.postList.length ? this.props.postList.length : 0} posts
         </p>
 
+        
         <div>
           <Button fab color="primary" aria-label="add" onClick={this.openModal}>
             <AddIcon />
           </Button>
         </div>
 
-        <Paper>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell></TableCell>
-                <TableCell>Title</TableCell>
-                {/* <TableCell>Content</TableCell> */}
-                <TableCell>Category</TableCell>
-                <TableCell>Author</TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>Score</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {this.props.postList.map((item) => (
-                  <TableRow 
-                    key={item.id} 
-                    value={item.id}
-                    hover
-                    onClick={event => this.handlePostClick(event, item.id)}
-                    role="checkbox" >
-                    <TableCell padding="checkbox"><Checkbox /></TableCell>
-                    <TableCell>{item.title}</TableCell>
-                    {/* <TableCell>{item.body}</TableCell> */}
-                    <TableCell>{item.category}</TableCell>
-                    <TableCell>{item.author}</TableCell>
-                    <TableCell>{item.timestamp}</TableCell>
-                    <TableCell>{item.voteScore}</TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-        </Paper>
+        <Route exact path='/' render={() => (
+          <PostList handlePostClick={this.handlePostClick} filter={"all"}/>
+        )}/>
+
+        
         
 
         <Modal
