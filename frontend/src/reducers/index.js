@@ -7,15 +7,13 @@ import {
   DELETE_COMMENT
 } from '../actions';
 
-// const initialPostsState = [];
-// const initialCommentsState = [];
-
 const initialState = {
   users: {},
   modal: {},
   posts: [],
   replies: {},
-  listeners: {}
+  listeners: {},
+  categories: []
 }
 
 
@@ -25,7 +23,6 @@ const postActions = (state = initialState, action) => {
     
   switch(action.type) {
     case ADD_POST:
-      // return [...state, currentPost];
       posts = [...state.posts, currentPost];
       return {...state, posts}
     case DELETE_POST:

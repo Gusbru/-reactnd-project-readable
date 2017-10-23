@@ -97,14 +97,15 @@ class App extends Component {
     console.log('post written to server');
 
     this.setState({
-      id         : '',
-      timestamp  : '', 
-      title      : '',
-      body       : '',
-      author     : '',
-      category   : '',
-      voteScore  : 1,
-      deleted    : false,
+      id           : '',
+      timestamp    : '', 
+      title        : '',
+      body         : '',
+      author       : '',
+      category     : '',
+      voteScore    : 1,
+      deleted      : false,
+      allCategories: [],
     });
 
     if (this.state.modalIsOpen) {
@@ -136,6 +137,9 @@ class App extends Component {
   handlePostClick = (event, id) => {
     console.log(id);
   }
+
+  // TODO: get categories from server 
+  categories = ['/', 'react', 'redux', 'udacity'];
   
   render() {
     // console.log('Props', this.props);
@@ -143,12 +147,7 @@ class App extends Component {
     return (
       <div className="App">
 
-        <SimpleAppBar title="My Posts"/>
-
-        <p>
-          We have {this.props.postList.length ? this.props.postList.length : 0} posts
-        </p>
-
+        <SimpleAppBar title="My Posts" categories={this.categories}/>
         
         <div>
           <Button fab color="primary" aria-label="add" onClick={this.openModal}>
@@ -156,8 +155,10 @@ class App extends Component {
           </Button>
         </div>
 
+
+        
         <Route exact path='/' render={() => (
-          <PostList handlePostClick={this.handlePostClick} filterCategory={"all"}/>
+          <PostList handlePostClick={this.handlePostClick} filterCategory={"/"}/>
         )}/>
 
         {/* TODO: loop over all categories */}
@@ -239,6 +240,7 @@ class App extends Component {
               </div>
             </div>
         </Modal>
+
       </div>
     );
   }
