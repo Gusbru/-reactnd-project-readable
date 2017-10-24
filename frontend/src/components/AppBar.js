@@ -31,7 +31,7 @@ class SimpleAppBar extends Component {
     });
   };
   
-  handleRequestClose = (category) => {
+  handleRequestClose = () => {
     this.setState({
       open: false,
     });
@@ -53,7 +53,7 @@ class SimpleAppBar extends Component {
             id="simple-menu"
             anchorEl={this.state.anchorEl}
             open={this.state.open}
-            onRequestClose={event => this.handleRequestClose(event, null)}
+            onRequestClose={event => this.handleRequestClose()}
             PaperProps={{
             style: {
               maxHeight: 48 * 4.5,
@@ -61,14 +61,22 @@ class SimpleAppBar extends Component {
             },
           }}
           >
+            <MenuItem
+              key="all"
+              component={Link}
+              to="/"
+              onClick={event => this.handleRequestClose()}
+            >
+              All
+            </MenuItem>
             {this.props.categories.map(category => (
               <MenuItem 
                 key={category} 
                 component={Link}
                 to={category}
-                onClick={event => this.handleRequestClose(category)}
+                onClick={event => this.handleRequestClose()}
               >
-                  {category}
+                {category}
               </MenuItem>
             ))}
             

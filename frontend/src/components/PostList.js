@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addPost, 
   deletePost,
@@ -10,8 +10,12 @@ import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Ta
 
 const PostList = (props) => {
   
-  const posts = props.postList.filter(_ => _.category === props.filterCategory || 
-                            props.filterCategory === '/')
+  console.log("filterCategory = ", props.filterCategory);
+
+  const posts = props.postList.filter(_ => _.category === props.filterCategory || props.filterCategory === 'All');
+
+  
+  
   
   return(
     <div>
@@ -26,6 +30,7 @@ const PostList = (props) => {
               <TableCell>Author</TableCell>
               <TableCell>Date</TableCell>
               <TableCell>Score</TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -34,12 +39,13 @@ const PostList = (props) => {
                 key={item.id} 
                 value={item.id}
                 hover
-                onClick={event => props.handlePostClick(event, item.id)}>
+                onClick={event => props.handlePostClick(item.id)}>
                   <TableCell>{item.title}</TableCell>
                   <TableCell>{item.category}</TableCell>
                   <TableCell>{item.author}</TableCell>
                   <TableCell>{item.timestamp}</TableCell>
                   <TableCell>{item.voteScore}</TableCell>
+                  <TableCell><button>Delete</button></TableCell>
               </TableRow>
             ))}
           </TableBody>

@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import SimpleAppBar from './AppBar';
 import { Route, Link, withRouter } from 'react-router-dom';
 import PostList from './PostList';
-import AddPost from './AddPost';
 import { connect } from 'react-redux';
 import { addPost, 
          deletePost,
-         retrievePosts 
+         retrievePosts,
+         retrieveCategories,
         } from '../actions';
 import Modal from 'react-modal';
 import { fetchPosts, writePost } from '../utils/api';
@@ -34,8 +34,9 @@ class App extends Component {
   };
 
   componentWillMount() {
-    console.log("component did mount");
+    console.log("component will mount");
     this.props.retrievePosts();
+    this.props.retrieveCategories();
   }
 
   openModal = () => {
@@ -82,7 +83,6 @@ class App extends Component {
       category     : '',
       voteScore    : 1,
       deleted      : false,
-      allCategories: [],
     });
 
     if (this.state.modalIsOpen) {
@@ -91,18 +91,17 @@ class App extends Component {
 
   }
 
-  removePost = (event) => {
+  removePost = (event, id) => {
     event.preventDefault();
 
     console.log(event);
 
-    const id = event.target.value;
     console.log('removing postId = ', id);
     if (!id) {
       return;
     }
 
-    this.props.removePost(id);
+    // this.props.removePost(id);
   }
 
   handlePostChange = name => event => {
@@ -111,21 +110,27 @@ class App extends Component {
     });
   }
 
-  handlePostClick = (event, id) => {
+  handlePostClick = (id) => {
     console.log(id);
+
   }
   
 
-  // TODO: get categories from server 
-  categories = ['/', 'react', 'redux', 'udacity'];
+  // TODO: get categories from server
+  categories = () => (
+    this.props.categoryList.map(item => (
+      item.name
+    ))
+  )
   
   render() {
-    // console.log('Props', this.props);
+    //console.log('Props', this.props);
+
 
     return (
       <div className="App">
 
-        <SimpleAppBar title="My Posts" categories={this.categories}/>
+        <SimpleAppBar title="My Posts" categories={this.categories()}/>
         
         <div>
           <Button fab color="primary" aria-label="add" onClick={this.openModal}>
@@ -136,23 +141,23 @@ class App extends Component {
         
         
         <Route exact path='/' render={() => (
-            <PostList handlePostClick={this.handlePostClick} filterCategory={"/"}/>
+            <PostList handlePostClick={this.handlePostClick} filterCategory={"All"}/>
         )}/>
 
         {/* TODO: loop over all categories */}
-        <Route exact path='/udacity' render={() => (
+        <Route path='/udacity' render={() => (
           <PostList handlePostClick={this.handlePostClick} filterCategory={"udacity"}/>
         )}/>
 
-        <Route exact path='/react' render={() => (
+        <Route path='/react' render={() => (
           <PostList handlePostClick={this.handlePostClick} filterCategory={"react"}/>
         )}/>
 
-        <Route exact path='/redux' render={() => (
+        <Route path='/redux' render={() => (
           <PostList handlePostClick={this.handlePostClick} filterCategory={"redux"}/>
         )}/>
         
-        
+       
 
         <Modal
           isOpen={this.state.modalIsOpen}
@@ -225,9 +230,10 @@ class App extends Component {
 }
 
 // connect component to redux Store
-const mapStateToProps = (postList) => (
+const mapStateToProps = (myActions) => (
   {
-    postList: postList.postActions.posts,
+    postList: myActions.postActions.posts,
+    categoryList: myActions.categoryActions.categories,
     // commentList: postList.comment
   }
 )
@@ -236,7 +242,8 @@ const mapDispatchToProps = (dispatch) => (
   {
     insertPost: (data) => dispatch(addPost(data)),
     removePost: (id) => dispatch(deletePost(id)),
-    retrievePosts: () => dispatch(retrievePosts())
+    retrievePosts: () => dispatch(retrievePosts()),
+    retrieveCategories: () => dispatch(retrieveCategories())
   }
 )
 

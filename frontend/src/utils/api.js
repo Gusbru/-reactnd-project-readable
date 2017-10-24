@@ -37,3 +37,18 @@ export const writePost = async (data) => (
   .then((res) => res.json())
   .catch(err => console.error('Error writing post to server ->', err))
 )
+
+export const fetchCategories = async (data) => (
+  await fetch(
+    url + '/categories',
+    {
+      method: 'GET',
+      headers: {
+        'Authorization': 'whatever-you-want',
+        'Content-Type' : 'application/json'
+      },
+    }
+  )
+  .then((res) => res.json())
+  .catch(err => console.error('Error receiving categories -> ', err))
+)

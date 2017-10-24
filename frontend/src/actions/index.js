@@ -1,20 +1,35 @@
-import { fetchPosts } from '../utils/api';
+import { 
+  fetchPosts,
+  fetchCategories,
+} from '../utils/api';
 
 export const ADD_POST = 'ADD_POST';
 export const DELETE_POST = 'DELETE_POST';
-export const ADD_COMMENT = 'ADD_COMMENT';
-export const DELETE_COMMENT = 'DELETE_COMMENT';
+export const GET_CATEGORIES = 'GET_CATEGORIES';
 
-
+// Get all posts from the server
 export const retrievePosts = () => async (dispatch) => {
-  console.log('Trying to retrieve the posts...');
+  console.log('[actions]Trying to retrieve the posts...');
   try {
     const posts = await fetchPosts();
     posts.map((item) => (
       dispatch(addPost(item))
     ));
   } catch(err) {
-    console.error("Error retrieving posts...", err)
+    console.error("Error retrieving posts...", err);
+  }
+}
+
+// Get all categories from the server
+export const retrieveCategories = () => async (dispatch) => {
+  console.log('[actions]Trying to retrieve the categories...');
+  try{
+    const {categories} = await fetchCategories();
+    categories.map((item) => (
+      dispatch(addCategory(item))
+    ));
+  } catch(err) {
+    console.error("Error retrieving categories...", err);
   }
 }
 
@@ -33,6 +48,16 @@ export const addPost = ({ id, timestamp, title, body, author, category, voteScor
     }
   }
 );
+
+export const addCategory = (item) => (
+  {
+    type: GET_CATEGORIES,
+    categories: {
+      name: item.name,
+      path: item.path
+    }
+  }
+)
 
 export const deletePost = (id) => (
   {
