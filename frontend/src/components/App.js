@@ -3,13 +3,16 @@ import SimpleAppBar from './AppBar';
 import { Route, Link, withRouter } from 'react-router-dom';
 import PostList from './PostList';
 import { connect } from 'react-redux';
-import { addPost, 
-         deletePost,
-         retrievePosts,
-         retrieveCategories,
-        } from '../actions';
+import { 
+  addPost, 
+  rmPost,
+  retrievePosts,
+  retrieveCategories,
+} from '../actions';
 import Modal from 'react-modal';
-import { fetchPosts, writePost } from '../utils/api';
+import { 
+  writePost,
+} from '../utils/api';
 import uuidv1 from 'uuid/v1';
 import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
@@ -91,17 +94,15 @@ class App extends Component {
 
   }
 
-  removePost = (event, id) => {
-    event.preventDefault();
-
-    console.log(event);
+  removePost = (id) => {
 
     console.log('removing postId = ', id);
     if (!id) {
       return;
     }
 
-    // this.props.removePost(id);
+    this.props.removePost(id);
+    
   }
 
   handlePostChange = name => event => {
@@ -141,20 +142,20 @@ class App extends Component {
         
         
         <Route exact path='/' render={() => (
-            <PostList handlePostClick={this.handlePostClick} filterCategory={"All"}/>
+            <PostList handlePostClick={this.handlePostClick} deletePost={this.removePost} filterCategory={"All"}/>
         )}/>
 
         {/* TODO: loop over all categories */}
         <Route path='/udacity' render={() => (
-          <PostList handlePostClick={this.handlePostClick} filterCategory={"udacity"}/>
+          <PostList handlePostClick={this.handlePostClick} deletePost={this.removePost} filterCategory={"udacity"}/>
         )}/>
 
         <Route path='/react' render={() => (
-          <PostList handlePostClick={this.handlePostClick} filterCategory={"react"}/>
+          <PostList handlePostClick={this.handlePostClick} deletePost={this.removePost} filterCategory={"react"}/>
         )}/>
 
         <Route path='/redux' render={() => (
-          <PostList handlePostClick={this.handlePostClick} filterCategory={"redux"}/>
+          <PostList handlePostClick={this.handlePostClick} deletePost={this.removePost} filterCategory={"redux"}/>
         )}/>
         
        
@@ -241,7 +242,8 @@ const mapStateToProps = (myActions) => (
 const mapDispatchToProps = (dispatch) => (
   {
     insertPost: (data) => dispatch(addPost(data)),
-    removePost: (id) => dispatch(deletePost(id)),
+    // removePost: (id) => dispatch(deletePost(id)),
+    removePost: (id) => dispatch(rmPost(id)),
     retrievePosts: () => dispatch(retrievePosts()),
     retrieveCategories: () => dispatch(retrieveCategories())
   }

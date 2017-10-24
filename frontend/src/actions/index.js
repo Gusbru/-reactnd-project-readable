@@ -1,6 +1,7 @@
 import { 
   fetchPosts,
   fetchCategories,
+  deletePostAPI,
 } from '../utils/api';
 
 export const ADD_POST = 'ADD_POST';
@@ -33,6 +34,17 @@ export const retrieveCategories = () => async (dispatch) => {
   }
 }
 
+//Removing post from the server
+export const rmPost = (id) => async(dispatch) => {
+  console.log('[action]Removing a post...');
+  try{
+    const postRemoved = await deletePostAPI(id);
+    dispatch(deletePost(postRemoved.id));
+  }catch(err){
+    console.error('Error removing post...', err);
+  };
+}
+
 export const addPost = ({ id, timestamp, title, body, author, category, voteScore, deleted }) => (
   {
     type: ADD_POST,
@@ -63,7 +75,8 @@ export const deletePost = (id) => (
   {
     type: DELETE_POST,
     post: {
-      id
+      id,
+      deleted: true
     }
   }
 );

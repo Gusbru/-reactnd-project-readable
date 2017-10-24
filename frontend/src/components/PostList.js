@@ -8,18 +8,23 @@ import { addPost,
 import Paper from 'material-ui/Paper';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 
-const PostList = (props) => {
+class PostList extends Component {
   
-  console.log("filterCategory = ", props.filterCategory);
+  handleDeleteButton = (event, id) => {
+    console.log('delete clicked', event.target.value, id);
+    if(event.target.value === 'delete') {
+      this.props.deletePost(id);
+    }
+  }
 
-  const posts = props.postList.filter(_ => _.category === props.filterCategory || props.filterCategory === 'All');
+  render() {
+  console.log("filterCategory = ", this.props.filterCategory);
 
-  
-  
+  const posts = this.props.postList.filter(_ => _.category === this.props.filterCategory || this.props.filterCategory === 'All');
   
   return(
     <div>
-      <p>We have {posts.length ? posts.length : 0} posts in the category: {props.filterCategory}</p>
+      <p>We have {posts.length ? posts.length : 0} posts in the category: {this.props.filterCategory}</p>
 
       <Paper>
         <Table>
@@ -39,13 +44,13 @@ const PostList = (props) => {
                 key={item.id} 
                 value={item.id}
                 hover
-                onClick={event => props.handlePostClick(item.id)}>
+                onClick={event => this.props.handlePostClick(item.id)}>
                   <TableCell>{item.title}</TableCell>
                   <TableCell>{item.category}</TableCell>
                   <TableCell>{item.author}</TableCell>
                   <TableCell>{item.timestamp}</TableCell>
                   <TableCell>{item.voteScore}</TableCell>
-                  <TableCell><button>Delete</button></TableCell>
+                  <TableCell><button value="delete" onClick={event => this.handleDeleteButton(event, item.id)}>Delete</button></TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -53,6 +58,7 @@ const PostList = (props) => {
       </Paper>
     </div>
   )
+}
 }
 
 // connect component to redux Store
@@ -70,5 +76,6 @@ const mapDispatchToProps = (dispatch) => (
     retrievePosts: () => dispatch(retrievePosts())
   }
 )
+
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostList);
