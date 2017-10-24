@@ -4,15 +4,12 @@ import { Route, Link, withRouter } from 'react-router-dom';
 import PostList from './PostList';
 import { connect } from 'react-redux';
 import { 
-  addPost, 
+  writePost, 
   rmPost,
   retrievePosts,
   retrieveCategories,
 } from '../actions';
 import Modal from 'react-modal';
-import { 
-  writePost,
-} from '../utils/api';
 import uuidv1 from 'uuid/v1';
 import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
@@ -72,10 +69,10 @@ class App extends Component {
     // insert post to redux-store
     this.props.insertPost(currentPost);
 
-    // insert post to server
-    console.log('writing post to server');
-    writePost(currentPost);
-    console.log('post written to server');
+    // // insert post to server
+    // console.log('writing post to server');
+    // writePost(currentPost);
+    // console.log('post written to server');
 
     this.setState({
       id           : '',
@@ -241,7 +238,7 @@ const mapStateToProps = (myActions) => (
 
 const mapDispatchToProps = (dispatch) => (
   {
-    insertPost: (data) => dispatch(addPost(data)),
+    insertPost: (data) => dispatch(writePost(data)),
     // removePost: (id) => dispatch(deletePost(id)),
     removePost: (id) => dispatch(rmPost(id)),
     retrievePosts: () => dispatch(retrievePosts()),

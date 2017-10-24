@@ -1,6 +1,7 @@
 import { 
   fetchPosts,
   fetchCategories,
+  writePostAPI,
   deletePostAPI,
 } from '../utils/api';
 
@@ -31,6 +32,17 @@ export const retrieveCategories = () => async (dispatch) => {
     ));
   } catch(err) {
     console.error("Error retrieving categories...", err);
+  }
+}
+
+// Write post to server
+export const writePost = (data) => async(dispatch) => {
+  console.log('[action]Adding a post...');
+  try{
+    const currentPost = await writePostAPI(data);
+    dispatch(addPost(data));
+  } catch(err){
+    console.log("Error writing post to server...", err);
   }
 }
 

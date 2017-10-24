@@ -15,7 +15,7 @@ export const fetchPosts = () => (
   .catch(err => console.error('Error retrieving posts from server -> ', err))
 );
 
-export const writePost = async (data) => (
+export const writePostAPI = async (data) => (
   await fetch(
     url + '/posts',
     {
