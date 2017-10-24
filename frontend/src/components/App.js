@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import SimpleAppBar from './AppBar';
-import { Route } from 'react-router-dom';
-import EnhancedTable from './AppTables';
+import { Route, Link, withRouter } from 'react-router-dom';
 import PostList from './PostList';
+import AddPost from './AddPost';
 import { connect } from 'react-redux';
 import { addPost, 
          deletePost,
@@ -11,31 +11,13 @@ import { addPost,
 import Modal from 'react-modal';
 import { fetchPosts, writePost } from '../utils/api';
 import uuidv1 from 'uuid/v1';
-import Radio from 'material-ui/Radio';
-import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import AddIcon from 'material-ui-icons/Add';
-import DeleteForever from 'material-ui-icons/DeleteForever'
-import Edit from 'material-ui-icons/Edit';
 import Send from 'material-ui-icons/Send';
 import Cancel from 'material-ui-icons/Cancel';
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
-import Checkbox from 'material-ui/Checkbox';
-import Paper from 'material-ui/Paper';
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/Menu/MenuItem';
 import './App.css';
-
-const customStyles = {
-  content : {
-    top                   : '50%',
-    left                  : '50%',
-    right                 : 'auto',
-    bottom                : 'auto',
-    marginRight           : '-50%',
-    transform             : 'translate(-50%, -50%)'
-  }
-};
 
 class App extends Component {
 
@@ -60,11 +42,6 @@ class App extends Component {
     this.setState(() => ({
       modalIsOpen: true
     }));
-  }
-
-  afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    this.subtitle.style.color = '#f00';
   }
 
   closeModal = () => {
@@ -137,6 +114,7 @@ class App extends Component {
   handlePostClick = (event, id) => {
     console.log(id);
   }
+  
 
   // TODO: get categories from server 
   categories = ['/', 'react', 'redux', 'udacity'];
@@ -153,12 +131,12 @@ class App extends Component {
           <Button fab color="primary" aria-label="add" onClick={this.openModal}>
             <AddIcon />
           </Button>
-        </div>
-
+        </div> 
 
         
+        
         <Route exact path='/' render={() => (
-          <PostList handlePostClick={this.handlePostClick} filterCategory={"/"}/>
+            <PostList handlePostClick={this.handlePostClick} filterCategory={"/"}/>
         )}/>
 
         {/* TODO: loop over all categories */}
@@ -262,4 +240,6 @@ const mapDispatchToProps = (dispatch) => (
   }
 )
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(App)
+);

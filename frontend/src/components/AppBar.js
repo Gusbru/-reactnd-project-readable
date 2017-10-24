@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import AppBar from 'material-ui/AppBar';
 import Toolbar from 'material-ui/Toolbar';
 import Typography from 'material-ui/Typography';
 import Button from 'material-ui/Button';
-import Menu, { MenuItem } from 'material-ui/Menu';
+import Menu from 'material-ui/Menu';
+import { MenuItem } from 'material-ui/Menu'
 import MenuIcon from 'material-ui-icons/Menu';
 
 const styles = theme => ({
@@ -29,16 +31,10 @@ class SimpleAppBar extends Component {
     });
   };
   
-  handleRequestClose = (event, category) => {
-    if (category) {
-      window.location = category;
-    }
-    
+  handleRequestClose = (category) => {
     this.setState({
       open: false,
     });
-    console.log(category);
-    
   };
   
   render() {
@@ -66,7 +62,14 @@ class SimpleAppBar extends Component {
           }}
           >
             {this.props.categories.map(category => (
-              <MenuItem key={category} onClick={event => this.handleRequestClose(event, category)}>{category}</MenuItem>
+              <MenuItem 
+                key={category} 
+                component={Link}
+                to={category}
+                onClick={event => this.handleRequestClose(category)}
+              >
+                  {category}
+              </MenuItem>
             ))}
             
           </Menu>

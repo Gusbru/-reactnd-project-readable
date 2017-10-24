@@ -10,8 +10,7 @@ import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Ta
 
 const PostList = (props) => {
   
-  const posts = props.postList.
-                filter(_ => _.category === props.filterCategory || 
+  const posts = props.postList.filter(_ => _.category === props.filterCategory || 
                             props.filterCategory === '/')
   
   return(
