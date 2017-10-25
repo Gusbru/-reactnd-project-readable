@@ -22,6 +22,19 @@ class PostList extends Component {
     }
   }
 
+  formatDate = (milliseconds) => {
+    const dataFormated = new Date(milliseconds);
+    const day = dataFormated.getDate();
+    const month = dataFormated.getMonth()+1;
+    const year = dataFormated.getFullYear();
+    const hour = dataFormated.getHours();
+    const minutes = dataFormated.getMinutes();
+    const seconds = dataFormated.getSeconds();
+    return(
+      `${day}/${month}/${year} at ${hour}:${minutes}:${seconds}`
+    )
+  }
+
   render() {
   console.log("filterCategory = ", this.props.filterCategory);
 
@@ -53,7 +66,7 @@ class PostList extends Component {
                   <TableCell>{item.title}</TableCell>
                   <TableCell>{item.category}</TableCell>
                   <TableCell>{item.author}</TableCell>
-                  <TableCell>{item.timestamp}</TableCell>
+                  <TableCell>{this.formatDate(item.timestamp)}</TableCell>
                   <TableCell>{item.voteScore}</TableCell>
                   <TableCell>
                     <button value="upVote" onClick={event => this.handleVote(event, item.id)}>+</button>
