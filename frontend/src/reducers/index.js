@@ -8,17 +8,18 @@ import {
   POST_VOTE_DOWN
 } from '../actions';
 
-const initialState = {
+const initialStatePosts = {
   users: {},
-  modal: {},
   posts: [],
-  replies: {},
-  listeners: {},
+  replies: [],
+}
+
+const initialStateCategories = {
   categories: []
 }
 
 
-const postActions = (state = initialState, action) => {
+const postActions = (state = initialStatePosts, action) => {
   const currentPost = action.post;
   // let posts = [];
     
@@ -60,7 +61,7 @@ const postActions = (state = initialState, action) => {
   }
 };
 
-const categoryActions = (state = initialState, action) => {
+const categoryActions = (state = initialStateCategories, action) => {
   const categoryList = action.categories;
 
   switch(action.type) {
