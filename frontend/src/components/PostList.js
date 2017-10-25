@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Route, Link, withRouter } from 'react-router-dom';
+import PostDetail from './PostDetail';
 
 import Paper from 'material-ui/Paper';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
@@ -13,8 +15,8 @@ class PostList extends Component {
     }
   }
 
-
   handleVote = (event, id) => {
+    event.preventDefault();
     if (event.target.value === 'upVote') {
       this.props.upVote(id);
     } else if (event.target.value === 'downVote') {
@@ -36,13 +38,15 @@ class PostList extends Component {
   }
 
   render() {
-  console.log("filterCategory = ", this.props.filterCategory);
+  const filterCategory = this.props.match.params.category ? this.props.match.params.category : "All";
 
-  const posts = this.props.postList.filter(_ => _.category === this.props.filterCategory || this.props.filterCategory === 'All');
+  console.log("filterCategory = ", filterCategory);
+
+  const posts = this.props.postList.filter(_ => _.category === filterCategory || filterCategory === 'All');
   
   return(
     <div>
-      <p>We have {posts.length ? posts.length : 0} posts in the category: {this.props.filterCategory}</p>
+      <p>We have {posts.length ? posts.length : 0} posts in the category: {filterCategory}</p>
 
       <Paper>
         <Table>
@@ -58,22 +62,25 @@ class PostList extends Component {
           </TableHead>
           <TableBody>
             {posts.map((item) => (
-              <TableRow 
-                key={item.id} 
-                value={item.id}
-                hover
-                onClick={event => this.props.handlePostClick(item.id)}>
-                  <TableCell>{item.title}</TableCell>
-                  <TableCell>{item.category}</TableCell>
-                  <TableCell>{item.author}</TableCell>
-                  <TableCell>{this.formatDate(item.timestamp)}</TableCell>
-                  <TableCell>{item.voteScore}</TableCell>
-                  <TableCell>
-                    <button value="upVote" onClick={event => this.handleVote(event, item.id)}>+</button>
-                    <button value="downVote" onClick={event => this.handleVote(event, item.id)}>-</button>
-                    <button value="delete" onClick={event => this.handleDeleteButton(event, item.id)}>Delete</button>
-                  </TableCell>
-              </TableRow>
+              
+                <TableRow 
+                  key={item.id} 
+                  value={item.id}
+                  hover
+                  onClick={event => this.props.handlePostClick(item.id, item.category)}>
+                    <TableCell>{item.title}</TableCell>
+                    <TableCell>{item.category}</TableCell>
+                    <TableCell>{item.author}</TableCell>
+                    <TableCell>{this.formatDate(item.timestamp)}</TableCell>
+                    <TableCell>{item.voteScore}</TableCell>
+                    <TableCell>
+                      <button value="upVote" onClick={event => this.handleVote(event, item.id)}>+</button>
+                      <button value="downVote" onClick={event => this.handleVote(event, item.id)}>-</button>
+                      <button >Edit</button>
+                      <button value="delete" onClick={event => this.handleDeleteButton(event, item.id)}>Delete</button>
+                    </TableCell>
+                </TableRow>
+
             ))}
           </TableBody>
         </Table>
@@ -98,4 +105,6 @@ const mapDispatchToProps = (dispatch) => (
 )
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostList);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(PostList)
+);

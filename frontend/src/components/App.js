@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import SimpleAppBar from './AppBar';
-import { Route, withRouter } from 'react-router-dom';
+import { Route, withRouter, Redirect } from 'react-router-dom';
 import PostList from './PostList';
+import PostDetail from './PostDetail';
 import { connect } from 'react-redux';
 import { 
   writePost, 
@@ -110,9 +111,8 @@ class App extends Component {
     });
   }
 
-  handlePostClick = (id) => {
-    console.log(id);
-
+  handlePostClick = (id, category) => {
+    console.log(id, category);
   }
 
   upVote = (id) => {
@@ -149,46 +149,39 @@ class App extends Component {
 
         
         
-        <Route exact path='/' render={() => (
-            <PostList 
+        <Route 
+          path='/'
+          exact
+          render={() => (
+            <PostList
               handlePostClick={this.handlePostClick} 
               deletePost={this.removePost} 
               upVote={this.upVote}
               downVote={this.downVote} 
-              filterCategory={"All"}
             />
         )}/>
+        
+        <Route 
+          path='/:category'
+          exact
+          render={({ match }) => (
+            <PostList
+              match={match}
+              handlePostClick={this.handlePostClick} 
+              deletePost={this.removePost} 
+              upVote={this.upVote}
+              downVote={this.downVote}
+            />
+          )}
+        />
 
-        {/* TODO: loop over all categories */}
-        <Route path='/udacity' render={() => (
-          <PostList 
-            handlePostClick={this.handlePostClick} 
-            deletePost={this.removePost}
-            upVote={this.upVote}
-            downVote={this.downVote}  
-            filterCategory={"udacity"}
-          />
-        )}/>
-
-        <Route path='/react' render={() => (
-          <PostList 
-            handlePostClick={this.handlePostClick} 
-            deletePost={this.removePost} 
-            upVote={this.upVote}
-            downVote={this.downVote} 
-            filterCategory={"react"}
-          />
-        )}/>
-
-        <Route path='/redux' render={() => (
-          <PostList 
-            handlePostClick={this.handlePostClick} 
-            deletePost={this.removePost} 
-            upVote={this.upVote}
-            downVote={this.downVote} 
-            filterCategory={"redux"}
-          />
-        )}/>
+        <Route 
+          path='/:category/:postId'
+          exact
+          render={({ match }) => (
+            <PostDetail match={match} test={"10"}/>
+          )}
+        />
         
        
 
