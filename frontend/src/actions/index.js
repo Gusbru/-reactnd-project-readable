@@ -3,11 +3,15 @@ import {
   fetchCategories,
   writePostAPI,
   deletePostAPI,
+  postUpVoteAPI,
+  postDownVoteAPI,
 } from '../utils/api';
 
 export const ADD_POST = 'ADD_POST';
 export const DELETE_POST = 'DELETE_POST';
 export const GET_CATEGORIES = 'GET_CATEGORIES';
+export const POST_VOTE_UP = 'POST_VOTE_UP';
+export const POST_VOTE_DOWN = 'POST_VOTE_DOWN';
 
 // Get all posts from the server
 export const retrievePosts = () => async (dispatch) => {
@@ -57,6 +61,18 @@ export const rmPost = (id) => async(dispatch) => {
   };
 }
 
+//Vote up to a post
+export const upPost = (id) => async(dispatch) => {
+  try{
+    const voteUp = await postUpVoteAPI(id);
+    dispatch(postVoteUp(id));
+  } catch(err) {
+    console.log('Error voting up to a post...', err);
+  }
+}
+
+
+
 export const addPost = ({ id, timestamp, title, body, author, category, voteScore, deleted }) => (
   {
     type: ADD_POST,
@@ -92,3 +108,12 @@ export const deletePost = (id) => (
     }
   }
 );
+
+export const postVoteUp = (id) => (
+  {
+    type: POST_VOTE_UP,
+    post: {
+      id
+    }
+  }
+)

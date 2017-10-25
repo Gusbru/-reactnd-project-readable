@@ -8,6 +8,7 @@ import {
   rmPost,
   retrievePosts,
   retrieveCategories,
+  upPost,
 } from '../actions';
 import Modal from 'react-modal';
 import uuidv1 from 'uuid/v1';
@@ -112,6 +113,11 @@ class App extends Component {
     console.log(id);
 
   }
+
+  upVote = (id) => {
+    console.log('botao voto up', id)
+    this.props.voteUpPost(id);
+  }
   
 
   // TODO: get categories from server
@@ -139,7 +145,7 @@ class App extends Component {
         
         
         <Route exact path='/' render={() => (
-            <PostList handlePostClick={this.handlePostClick} deletePost={this.removePost} filterCategory={"All"}/>
+            <PostList handlePostClick={this.handlePostClick} deletePost={this.removePost} upVote={this.upVote} filterCategory={"All"}/>
         )}/>
 
         {/* TODO: loop over all categories */}
@@ -239,10 +245,10 @@ const mapStateToProps = (myActions) => (
 const mapDispatchToProps = (dispatch) => (
   {
     insertPost: (data) => dispatch(writePost(data)),
-    // removePost: (id) => dispatch(deletePost(id)),
     removePost: (id) => dispatch(rmPost(id)),
     retrievePosts: () => dispatch(retrievePosts()),
-    retrieveCategories: () => dispatch(retrieveCategories())
+    retrieveCategories: () => dispatch(retrieveCategories()),
+    voteUpPost: (id) => dispatch((upPost(id))),
   }
 )
 

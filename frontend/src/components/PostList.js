@@ -12,8 +12,17 @@ class PostList extends Component {
   
   handleDeleteButton = (event, id) => {
     console.log('delete clicked', event.target.value, id);
-    if(event.target.value === 'delete') {
+    if (event.target.value === 'delete') {
       this.props.deletePost(id);
+    }
+  }
+
+
+  handleVote = (event, id) => {
+    if (event.target.value === 'upVote') {
+      this.props.upVote(id);
+    } else if (event.target.value === 'downVote') {
+      this.props.downVote(id);
     }
   }
 
@@ -50,7 +59,11 @@ class PostList extends Component {
                   <TableCell>{item.author}</TableCell>
                   <TableCell>{item.timestamp}</TableCell>
                   <TableCell>{item.voteScore}</TableCell>
-                  <TableCell><button value="delete" onClick={event => this.handleDeleteButton(event, item.id)}>Delete</button></TableCell>
+                  <TableCell>
+                    <button value="upVote" onClick={event => this.handleVote(event, item.id)}>+</button>
+                    <button value="downVote" onClick={event => this.handleVote(event, item.id)}>-</button>
+                    <button value="delete" onClick={event => this.handleDeleteButton(event, item.id)}>Delete</button>
+                  </TableCell>
               </TableRow>
             ))}
           </TableBody>

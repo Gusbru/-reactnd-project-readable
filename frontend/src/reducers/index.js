@@ -4,6 +4,8 @@ import {
   ADD_POST,
   DELETE_POST,
   GET_CATEGORIES,
+  POST_VOTE_UP,
+  POST_VOTE_DOWN
 } from '../actions';
 
 const initialState = {
@@ -32,6 +34,16 @@ const postActions = (state = initialState, action) => {
       return {
         ...state, 
         posts: state.posts.filter((item) => item.id !== currentPost.id)
+      };
+    case POST_VOTE_UP:
+      const [postUp] = state.posts.filter(item => item.id === currentPost.id);
+      postUp.voteScore++;
+      const post = state.posts.map(item => (
+        item.id === currentPost.id ? postUp : item
+      ))
+      return {
+        ...state,
+        posts: [...post]
       };
     default:
       return state;

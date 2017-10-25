@@ -68,3 +68,39 @@ export const deletePostAPI = async (id) => (
   .then((res) => res.json())
   .catch(err => console.error('Error deleting the post ->', err))
 );
+
+export const postUpVoteAPI = async (id) => (
+  await fetch(
+    url + `/posts/${id}`,
+    {
+      method: 'POST',
+      headers: { 
+        'Authorization': 'whatever-you-want',
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify({
+        option: "upVote"
+      })
+    }
+  )
+  .then((res) => res.json())
+  .catch(err => console.error('Error computing upVote to server ->', err))
+);
+
+export const postDownVoteAPI = async (id) => (
+  await fetch(
+    url + `/posts/${id}`,
+    {
+      method: 'POST',
+      headers: { 
+        'Authorization': 'whatever-you-want',
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify({
+        option: "downVote"
+      })
+    }
+  )
+  .then((res) => res.json())
+  .catch(err => console.error('Error computing downVote to server ->', err))
+);
