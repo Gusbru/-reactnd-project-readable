@@ -71,9 +71,19 @@ export const upPost = (id) => async(dispatch) => {
   }
 }
 
+// Vote down to a post
+export const downPost = (id) => async(dispatch) => {
+  try {
+    const voteDown = await postDownVoteAPI(id);
+    dispatch(postVodeDown(id));
+  } catch(err) {
+    console.log('Error voting down to a post...', err);
+  }
+}
 
 
-export const addPost = ({ id, timestamp, title, body, author, category, voteScore, deleted }) => (
+
+const addPost = ({ id, timestamp, title, body, author, category, voteScore, deleted }) => (
   {
     type: ADD_POST,
     post: {
@@ -89,7 +99,7 @@ export const addPost = ({ id, timestamp, title, body, author, category, voteScor
   }
 );
 
-export const addCategory = (item) => (
+const addCategory = (item) => (
   {
     type: GET_CATEGORIES,
     categories: {
@@ -99,7 +109,7 @@ export const addCategory = (item) => (
   }
 )
 
-export const deletePost = (id) => (
+const deletePost = (id) => (
   {
     type: DELETE_POST,
     post: {
@@ -109,9 +119,18 @@ export const deletePost = (id) => (
   }
 );
 
-export const postVoteUp = (id) => (
+const postVoteUp = (id) => (
   {
     type: POST_VOTE_UP,
+    post: {
+      id
+    }
+  }
+)
+
+const postVodeDown = (id) => (
+  {
+    type: POST_VOTE_DOWN,
     post: {
       id
     }

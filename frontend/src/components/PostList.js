@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addPost, 
-  deletePost,
-  retrievePosts 
- } from '../actions';
 
 import Paper from 'material-ui/Paper';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
@@ -84,9 +80,7 @@ const mapStateToProps = (postList) => (
 
 const mapDispatchToProps = (dispatch) => (
   {
-    insertPost: (data) => dispatch(addPost(data)),
-    removePost: (id) => dispatch(deletePost(id)),
-    retrievePosts: () => dispatch(retrievePosts())
+    
   }
 )
 

@@ -9,6 +9,7 @@ import {
   retrievePosts,
   retrieveCategories,
   upPost,
+  downPost,
 } from '../actions';
 import Modal from 'react-modal';
 import uuidv1 from 'uuid/v1';
@@ -118,6 +119,10 @@ class App extends Component {
     console.log('botao voto up', id)
     this.props.voteUpPost(id);
   }
+
+  downVote = (id) => {
+    this.props.voteDownPost(id);
+  }
   
 
   // TODO: get categories from server
@@ -145,20 +150,44 @@ class App extends Component {
         
         
         <Route exact path='/' render={() => (
-            <PostList handlePostClick={this.handlePostClick} deletePost={this.removePost} upVote={this.upVote} filterCategory={"All"}/>
+            <PostList 
+              handlePostClick={this.handlePostClick} 
+              deletePost={this.removePost} 
+              upVote={this.upVote}
+              downVote={this.downVote} 
+              filterCategory={"All"}
+            />
         )}/>
 
         {/* TODO: loop over all categories */}
         <Route path='/udacity' render={() => (
-          <PostList handlePostClick={this.handlePostClick} deletePost={this.removePost} filterCategory={"udacity"}/>
+          <PostList 
+            handlePostClick={this.handlePostClick} 
+            deletePost={this.removePost}
+            upVote={this.upVote}
+            downVote={this.downVote}  
+            filterCategory={"udacity"}
+          />
         )}/>
 
         <Route path='/react' render={() => (
-          <PostList handlePostClick={this.handlePostClick} deletePost={this.removePost} filterCategory={"react"}/>
+          <PostList 
+            handlePostClick={this.handlePostClick} 
+            deletePost={this.removePost} 
+            upVote={this.upVote}
+            downVote={this.downVote} 
+            filterCategory={"react"}
+          />
         )}/>
 
         <Route path='/redux' render={() => (
-          <PostList handlePostClick={this.handlePostClick} deletePost={this.removePost} filterCategory={"redux"}/>
+          <PostList 
+            handlePostClick={this.handlePostClick} 
+            deletePost={this.removePost} 
+            upVote={this.upVote}
+            downVote={this.downVote} 
+            filterCategory={"redux"}
+          />
         )}/>
         
        
@@ -248,7 +277,8 @@ const mapDispatchToProps = (dispatch) => (
     removePost: (id) => dispatch(rmPost(id)),
     retrievePosts: () => dispatch(retrievePosts()),
     retrieveCategories: () => dispatch(retrieveCategories()),
-    voteUpPost: (id) => dispatch((upPost(id))),
+    voteUpPost: (id) => dispatch(upPost(id)),
+    voteDownPost: (id) => dispatch(downPost(id)),
   }
 )
 

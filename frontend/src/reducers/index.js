@@ -38,12 +38,22 @@ const postActions = (state = initialState, action) => {
     case POST_VOTE_UP:
       const [postUp] = state.posts.filter(item => item.id === currentPost.id);
       postUp.voteScore++;
-      const post = state.posts.map(item => (
+      const postNewUp = state.posts.map(item => (
         item.id === currentPost.id ? postUp : item
       ))
       return {
         ...state,
-        posts: [...post]
+        posts: [...postNewUp]
+      };
+    case POST_VOTE_DOWN:
+      const [postDown] = state.posts.filter(item => item.id === currentPost.id);
+      postDown.voteScore--;
+      const postNewDown = state.posts.map(item => (
+        item.id === currentPost.id ? postDown : item
+      ))
+      return {
+        ...state,
+        posts: [...postNewDown]
       };
     default:
       return state;
