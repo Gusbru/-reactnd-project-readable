@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 
+import Button from 'material-ui/Button';
+import Send from 'material-ui-icons/Send';
+import Cancel from 'material-ui-icons/Cancel';
+import TextField from 'material-ui/TextField';
+import MenuItem from 'material-ui/Menu/MenuItem';
+
 class PostDetail extends Component {
   render(){
-    console.log('props inside postdetails', this.props)
+        
     return(
       <div>
-        The category is {this.props.match.params.category}
-        <br/>
-        The number is {this.props.match.params.postId}
+      
       </div>
     );
   };

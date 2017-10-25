@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SimpleAppBar from './AppBar';
-import { Route, withRouter, Redirect } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
 import PostList from './PostList';
 import PostDetail from './PostDetail';
 import { connect } from 'react-redux';
@@ -15,7 +15,6 @@ import {
 import Modal from 'react-modal';
 import uuidv1 from 'uuid/v1';
 import Button from 'material-ui/Button';
-import AddIcon from 'material-ui-icons/Add';
 import Send from 'material-ui-icons/Send';
 import Cancel from 'material-ui-icons/Cancel';
 import TextField from 'material-ui/TextField';
@@ -141,14 +140,6 @@ class App extends Component {
 
         <SimpleAppBar title="My Posts" categories={this.categories()}/>
         
-        <div>
-          <Button fab color="primary" aria-label="add" onClick={this.openModal}>
-            <AddIcon />
-          </Button>
-        </div> 
-
-        
-        
         <Route 
           path='/'
           exact
@@ -224,9 +215,11 @@ class App extends Component {
                   id='author'
                   name='author'
                   label='Author Name'
+                  fullWidth
                   value={this.state.author}
                   onChange={this.handlePostChange('author')}
                 />
+                <br/>
                 <TextField 
                   id='category'
                   name='category'
@@ -242,9 +235,10 @@ class App extends Component {
                   helperText="Please select a category"
                   margin="normal"
                 >
-                 <MenuItem key="react" name="category" value='react'>React</MenuItem> 
-                 <MenuItem key="redux" name="category" value='redux'>Redux</MenuItem> 
-                 <MenuItem key="udacity" name="category" value='udacity'>Udacity</MenuItem> 
+                  <MenuItem key="all" name="category" value='all' disabled>Category</MenuItem> 
+                  <MenuItem key="react" name="category" value='react'>React</MenuItem> 
+                  <MenuItem key="redux" name="category" value='redux'>Redux</MenuItem> 
+                  <MenuItem key="udacity" name="category" value='udacity'>Udacity</MenuItem> 
                 </TextField>
               </div>
             </div>

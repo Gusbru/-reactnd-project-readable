@@ -5,23 +5,34 @@ import PostDetail from './PostDetail';
 
 import Paper from 'material-ui/Paper';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+import Button from 'material-ui/Button';
+import AddIcon from 'material-ui-icons/Add';
+import IconButton from 'material-ui/IconButton';
+import AddCircle from 'material-ui-icons/AddCircle';
+import RemoveCircle from 'material-ui-icons/RemoveCircle';
+import DeleteForever from 'material-ui-icons/DeleteForever';
+import Edit from 'material-ui-icons/Edit';
+
 
 class PostList extends Component {
   
   handleDeleteButton = (event, id) => {
-    console.log('delete clicked', event.target.value, id);
-    if (event.target.value === 'delete') {
+    console.log('delete clicked', event, id);
+    if (event === 'delete') {
       this.props.deletePost(id);
     }
   }
 
   handleVote = (event, id) => {
-    event.preventDefault();
-    if (event.target.value === 'upVote') {
+    if (event === 'upVote') {
       this.props.upVote(id);
-    } else if (event.target.value === 'downVote') {
+    } else if (event === 'downVote') {
       this.props.downVote(id);
     }
+  }
+
+  handleEditButton = (event, id) => {
+    
   }
 
   formatDate = (milliseconds) => {
@@ -46,6 +57,13 @@ class PostList extends Component {
   
   return(
     <div>
+
+      <div>
+        <Button fab color="primary" aria-label="add" onClick={this.openModal}>
+          <AddIcon />
+        </Button>
+      </div> 
+
       <p>We have {posts.length ? posts.length : 0} posts in the category: {filterCategory}</p>
 
       <Paper>
@@ -62,25 +80,30 @@ class PostList extends Component {
           </TableHead>
           <TableBody>
             {posts.map((item) => (
-              
                 <TableRow 
                   key={item.id} 
                   value={item.id}
-                  hover
-                  onClick={event => this.props.handlePostClick(item.id, item.category)}>
-                    <TableCell>{item.title}</TableCell>
-                    <TableCell>{item.category}</TableCell>
-                    <TableCell>{item.author}</TableCell>
-                    <TableCell>{this.formatDate(item.timestamp)}</TableCell>
-                    <TableCell>{item.voteScore}</TableCell>
-                    <TableCell>
-                      <button value="upVote" onClick={event => this.handleVote(event, item.id)}>+</button>
-                      <button value="downVote" onClick={event => this.handleVote(event, item.id)}>-</button>
-                      <button >Edit</button>
-                      <button value="delete" onClick={event => this.handleDeleteButton(event, item.id)}>Delete</button>
-                    </TableCell>
+                  hover>
+                  <TableCell>{item.title}</TableCell>
+                  <TableCell>{item.category}</TableCell>
+                  <TableCell>{item.author}</TableCell>
+                  <TableCell>{this.formatDate(item.timestamp)}</TableCell>
+                  <TableCell>{item.voteScore}</TableCell>
+                  <TableCell>
+                    <IconButton onClick={(event) => this.handleVote("upVote", item.id)} >
+                      <AddCircle />
+                    </IconButton>
+                    <IconButton >
+                      <RemoveCircle onClick={(event) => this.handleVote("downVote", item.id)}/>
+                    </IconButton>
+                    <IconButton href={`/${item.category}/${item.id}`}>
+                      <Edit />
+                    </IconButton>
+                    <IconButton onClick={event => this.handleDeleteButton("delete", item.id)}>
+                      <DeleteForever />
+                    </IconButton>
+                  </TableCell>
                 </TableRow>
-
             ))}
           </TableBody>
         </Table>
