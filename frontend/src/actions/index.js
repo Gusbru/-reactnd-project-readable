@@ -43,7 +43,7 @@ export const retrieveCategories = () => async (dispatch) => {
 export const writePost = (data) => async(dispatch) => {
   console.log('[action]Adding a post...');
   try{
-    const currentPost = await writePostAPI(data);
+    await writePostAPI(data);
     dispatch(addPost(data));
   } catch(err){
     console.log("Error writing post to server...", err);
@@ -64,7 +64,7 @@ export const rmPost = (id) => async(dispatch) => {
 //Vote up to a post
 export const upPost = (id) => async(dispatch) => {
   try{
-    const voteUp = await postUpVoteAPI(id);
+    await postUpVoteAPI(id);
     dispatch(postVoteUp(id));
   } catch(err) {
     console.log('Error voting up to a post...', err);
@@ -74,7 +74,7 @@ export const upPost = (id) => async(dispatch) => {
 // Vote down to a post
 export const downPost = (id) => async(dispatch) => {
   try {
-    const voteDown = await postDownVoteAPI(id);
+    await postDownVoteAPI(id);
     dispatch(postVodeDown(id));
   } catch(err) {
     console.log('Error voting down to a post...', err);

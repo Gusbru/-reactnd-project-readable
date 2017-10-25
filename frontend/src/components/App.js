@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SimpleAppBar from './AppBar';
-import { Route, Link, withRouter } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
 import PostList from './PostList';
 import { connect } from 'react-redux';
 import { 
