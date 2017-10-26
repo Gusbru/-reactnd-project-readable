@@ -12,13 +12,11 @@ import {
   upPost,
   downPost,
 } from '../actions';
-import Modal from 'react-modal';
 import uuidv1 from 'uuid/v1';
+import Modal from 'react-modal';
 import Button from 'material-ui/Button';
 import Send from 'material-ui-icons/Send';
 import Cancel from 'material-ui-icons/Cancel';
-import TextField from 'material-ui/TextField';
-import MenuItem from 'material-ui/Menu/MenuItem';
 import './App.css';
 
 class App extends Component {
@@ -32,7 +30,8 @@ class App extends Component {
     author     : '',
     category   : '',
     voteScore  : 1,
-    deleted    : false
+    deleted    : false,
+    postToEdit : ""
   };
 
   componentWillMount() {
@@ -41,9 +40,12 @@ class App extends Component {
     this.props.retrieveCategories();
   }
 
-  openModal = () => {
+  openModal = (id) => {
+    console.log('opening the modal.....')
+    
     this.setState(() => ({
-      modalIsOpen: true
+      modalIsOpen: true,
+      postToEdit: this.props.postList.find((element) => element.id === id)
     }));
   }
 
@@ -53,9 +55,9 @@ class App extends Component {
     }))
   }
   
-  includePost = (event) => {
-
-    event.preventDefault();
+  includeNewPost = (event) => {
+    
+    
 
     const currentPost = {
       id        : uuidv1(),
@@ -68,14 +70,16 @@ class App extends Component {
       deleted   : this.state.deleted
     }
 
+    console.log(currentPost)
+    if(currentPost.category===""){
+      return;
+    }
+    console.log("including new post")
+
     // insert post to redux-store
     this.props.insertPost(currentPost);
-
-    // // insert post to server
-    // console.log('writing post to server');
-    // writePost(currentPost);
-    // console.log('post written to server');
-
+    
+    // update the local state
     this.setState({
       id           : '',
       timestamp    : '', 
@@ -84,14 +88,14 @@ class App extends Component {
       author       : '',
       category     : '',
       voteScore    : 1,
-      deleted      : false,
+      deleted      : false, 
     });
-
+    
     if (this.state.modalIsOpen) {
       this.closeModal();
-    }
-
+    }  
   }
+  
 
   removePost = (id) => {
 
@@ -102,12 +106,6 @@ class App extends Component {
 
     this.props.removePost(id);
     
-  }
-
-  handlePostChange = name => event => {
-    this.setState({ 
-      [name] : event.target.value 
-    });
   }
 
   handlePostClick = (id, category) => {
@@ -122,9 +120,16 @@ class App extends Component {
   downVote = (id) => {
     this.props.voteDownPost(id);
   }
+
+  closeModal = () => {
+    console.log('close modal')
+    this.setState(() => ({
+      modalIsOpen: false
+    }))
+  }
   
 
-  // TODO: get categories from server
+  // get categories from server
   categories = () => (
     this.props.categoryList.map(item => (
       item.name
@@ -145,7 +150,8 @@ class App extends Component {
           exact
           render={() => (
             <PostList
-              handlePostClick={this.handlePostClick} 
+              handlePostClick={this.handlePostClick}
+              openModal={this.openModal}
               deletePost={this.removePost} 
               upVote={this.upVote}
               downVote={this.downVote} 
@@ -158,7 +164,8 @@ class App extends Component {
           render={({ match }) => (
             <PostList
               match={match}
-              handlePostClick={this.handlePostClick} 
+              handlePostClick={this.handlePostClick}
+              openModal={this.openModal}
               deletePost={this.removePost} 
               upVote={this.upVote}
               downVote={this.downVote}
@@ -170,78 +177,24 @@ class App extends Component {
           path='/:category/:postId'
           exact
           render={({ match }) => (
-            <PostDetail match={match} test={"10"}/>
+            <PostDetail match={match}/>
           )}
         />
-        
-       
 
         <Modal
           isOpen={this.state.modalIsOpen}
           onRequestClose={this.closeModal}
           contentLabel='Modal'>
-            <div>
-            <div>
-                <Button color="primary" aria-label="add" onClick={this.includePost}>
-                  <Send />
-                </Button>
+          <div>
+            <Button color="primary" aria-label="add" onClick={this.includeNewPost}>
+              <Send />
+            </Button>
 
-                <Button color="primary" aria-label="add" onClick={this.closeModal}>
-                  <Cancel />
-                </Button>
-              </div>
-              <div>
-                <TextField
-                  id='title'
-                  name='title'
-                  label='Post Title'
-                  value={this.state.title}
-                  onChange={this.handlePostChange('title')}
-                  margin="normal"
-                  fullWidth
-                />
-                <TextField 
-                  id='body'
-                  name='body'
-                  label='Post text...'
-                  multiline
-                  fullWidth
-                  rows="4"
-                  margin="normal"
-                  value={this.state.body}
-                  onChange={this.handlePostChange('body')}
-                />
-                <TextField 
-                  id='author'
-                  name='author'
-                  label='Author Name'
-                  fullWidth
-                  value={this.state.author}
-                  onChange={this.handlePostChange('author')}
-                />
-                <br/>
-                <TextField 
-                  id='category'
-                  name='category'
-                  select
-                  label='Category:'
-                  value={this.state.category}
-                  onChange={this.handlePostChange('category')}
-                  SelectProps={{
-                    MenuProps: {
-                      className: "category",
-                    },
-                  }}
-                  helperText="Please select a category"
-                  margin="normal"
-                >
-                  <MenuItem key="all" name="category" value='all' disabled>Category</MenuItem> 
-                  <MenuItem key="react" name="category" value='react'>React</MenuItem> 
-                  <MenuItem key="redux" name="category" value='redux'>Redux</MenuItem> 
-                  <MenuItem key="udacity" name="category" value='udacity'>Udacity</MenuItem> 
-                </TextField>
-              </div>
-            </div>
+            <Button color="primary" aria-label="add" onClick={this.closeModal}>
+              <Cancel />
+            </Button>
+            <PostDetail postToEdit={this.state.postToEdit}/>
+          </div>
         </Modal>
 
       </div>

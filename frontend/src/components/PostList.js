@@ -30,10 +30,7 @@ class PostList extends Component {
       this.props.downVote(id);
     }
   }
-
-  handleEditButton = (event, id) => {
-    
-  }
+  
 
   formatDate = (milliseconds) => {
     const dataFormated = new Date(milliseconds);
@@ -49,67 +46,69 @@ class PostList extends Component {
   }
 
   render() {
-  const filterCategory = this.props.match.params.category ? this.props.match.params.category : "All";
+    const filterCategory = this.props.match.params.category ? this.props.match.params.category : "All";
 
-  console.log("filterCategory = ", filterCategory);
+    console.log("filterCategory = ", filterCategory);
 
-  const posts = this.props.postList.filter(_ => _.category === filterCategory || filterCategory === 'All');
-  
-  return(
-    <div>
-
+    const posts = this.props.postList.filter(_ => _.category === filterCategory || filterCategory === 'All');
+    
+    return(
       <div>
-        <Button fab color="primary" aria-label="add" onClick={this.openModal}>
-          <AddIcon />
-        </Button>
-      </div> 
 
-      <p>We have {posts.length ? posts.length : 0} posts in the category: {filterCategory}</p>
+        <div>
+          <Button fab color="primary" aria-label="add" onClick={this.props.openModal}>
+            <AddIcon />
+          </Button>
+        </div> 
 
-      <Paper>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Title</TableCell>
-              <TableCell>Category</TableCell>
-              <TableCell>Author</TableCell>
-              <TableCell>Date</TableCell>
-              <TableCell>Score</TableCell>
-              <TableCell>Actions</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {posts.map((item) => (
-                <TableRow 
-                  key={item.id} 
-                  value={item.id}
-                  hover>
-                  <TableCell>{item.title}</TableCell>
-                  <TableCell>{item.category}</TableCell>
-                  <TableCell>{item.author}</TableCell>
-                  <TableCell>{this.formatDate(item.timestamp)}</TableCell>
-                  <TableCell>{item.voteScore}</TableCell>
-                  <TableCell>
-                    <IconButton onClick={(event) => this.handleVote("upVote", item.id)} >
-                      <AddCircle />
-                    </IconButton>
-                    <IconButton >
-                      <RemoveCircle onClick={(event) => this.handleVote("downVote", item.id)}/>
-                    </IconButton>
-                    <IconButton href={`/${item.category}/${item.id}`}>
-                      <Edit />
-                    </IconButton>
-                    <IconButton onClick={event => this.handleDeleteButton("delete", item.id)}>
-                      <DeleteForever />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
-    </div>
-  )
+        <p>We have {posts.length ? posts.length : 0} posts in the category: {filterCategory}</p>
+
+        <Paper>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Title</TableCell>
+                <TableCell>Category</TableCell>
+                <TableCell>Author</TableCell>
+                <TableCell>Date</TableCell>
+                <TableCell>Score</TableCell>
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {posts.map((item) => (
+                  <TableRow 
+                    key={item.id} 
+                    value={item.id}
+                    hover>
+                    <TableCell>{item.title}</TableCell>
+                    <TableCell>{item.category}</TableCell>
+                    <TableCell>{item.author}</TableCell>
+                    <TableCell>{this.formatDate(item.timestamp)}</TableCell>
+                    <TableCell>
+                      {item.voteScore}
+                    </TableCell>
+                    <TableCell>
+                      <IconButton onClick={(event) => this.handleVote("upVote", item.id)} >
+                        <AddCircle />
+                      </IconButton>
+                      <IconButton >
+                        <RemoveCircle onClick={(event) => this.handleVote("downVote", item.id)}/>
+                      </IconButton>
+                      <IconButton onClick={() => this.props.openModal(item.id)} >
+                        <Edit />
+                      </IconButton>
+                      <IconButton onClick={event => this.handleDeleteButton("delete", item.id)}>
+                        <DeleteForever />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+      </div>
+    )
 }
 }
 
