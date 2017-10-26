@@ -56,8 +56,6 @@ class App extends Component {
   }
   
   includeNewPost = (event) => {
-    
-    
 
     const currentPost = {
       id        : uuidv1(),
@@ -113,11 +111,12 @@ class App extends Component {
   }
 
   upVote = (id) => {
-    console.log('botao voto up', id)
+    console.log('botao voto up', id);
     this.props.voteUpPost(id);
   }
 
   downVote = (id) => {
+    console.log('botao voto down', id)
     this.props.voteDownPost(id);
   }
 

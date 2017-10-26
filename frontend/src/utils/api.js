@@ -1,7 +1,7 @@
 const url = 'http://localhost:3001';
 
-export const fetchPosts = () => (
-  fetch(
+export const fetchPosts = async () => (
+  await fetch(
     url + '/posts',
     {
       method: 'GET',
@@ -14,6 +14,21 @@ export const fetchPosts = () => (
   .then((res) => res.json())
   .catch(err => console.error('Error retrieving posts from server -> ', err))
 );
+
+export const fetchSinglePost = async (id) => (
+  await fetch(
+    url + `/posts/${id}`,
+    {
+      method: 'GET',
+      headers: { 
+        'Authorization': 'whatever-you-want',
+        'Content-Type' : 'application/json'
+      }
+    }
+  )
+  .then(res => res.json())
+  .catch(err => console.error('Error retrieving the post from server ->', err))
+)
 
 export const writePostAPI = async (data) => (
   await fetch(

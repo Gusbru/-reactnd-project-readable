@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { writePost } from '../actions';
-import uuidv1 from 'uuid/v1';
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/Menu/MenuItem';
 
-class PostDetail extends Component {
+
+class PostDetail extends Component {  
 
   state = {
     id         : '',
-    timestamp  : '', 
+    timestamp  : '',
     title      : '',
     body       : '',
     author     : '',
@@ -20,8 +20,12 @@ class PostDetail extends Component {
     modalIsOpen: '',
   };
 
-  componentDidMount() {
-    this.setState(this.props.postToEdit);
+  componentWillReceiveProps(nextProps) {
+    // this.setState(this.props.info);
+    const id = nextProps.match.params.postId;
+    const [postToEdit] = this.props.postList.filter(item => item.id === id);
+    console.log('[PostDetail] componentWillReceiveProps = ', postToEdit)
+    this.setState(postToEdit);
   }
 
   handlePostChange = name => event => {
@@ -30,11 +34,16 @@ class PostDetail extends Component {
     });
   };
 
+  updatePost = (state) => {
+    this.setState(state)
+  }
 
   render(){
 
     return(
       <div>
+        Editing post id {this.props.match.params.postId}
+
         <div>
           <TextField
             id='title'
@@ -62,7 +71,7 @@ class PostDetail extends Component {
             <MenuItem key="udacity" name="category" value='udacity'>Udacity</MenuItem> 
           </TextField>
         </div>
-        
+
       </div>
     );
   };

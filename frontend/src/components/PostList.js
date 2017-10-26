@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Route, Link, withRouter } from 'react-router-dom';
-import PostDetail from './PostDetail';
-
 import Paper from 'material-ui/Paper';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import Button from 'material-ui/Button';
@@ -11,6 +9,7 @@ import IconButton from 'material-ui/IconButton';
 import AddCircle from 'material-ui-icons/AddCircle';
 import RemoveCircle from 'material-ui-icons/RemoveCircle';
 import DeleteForever from 'material-ui-icons/DeleteForever';
+import Info from 'material-ui-icons/Info';
 import Edit from 'material-ui-icons/Edit';
 
 
@@ -24,10 +23,15 @@ class PostList extends Component {
   }
 
   handleVote = (event, id) => {
-    if (event === 'upVote') {
-      this.props.upVote(id);
-    } else if (event === 'downVote') {
-      this.props.downVote(id);
+    switch(event) {
+      case "upVote":
+        this.props.upVote(id);
+        break;
+      case "downVote":
+        this.props.downVote(id);
+        break;
+      default:
+        break;
     }
   }
   
@@ -92,11 +96,14 @@ class PostList extends Component {
                       <IconButton onClick={(event) => this.handleVote("upVote", item.id)} >
                         <AddCircle />
                       </IconButton>
-                      <IconButton >
-                        <RemoveCircle onClick={(event) => this.handleVote("downVote", item.id)}/>
+                      <IconButton onClick={(event) => this.handleVote("downVote", item.id)}>
+                        <RemoveCircle />
                       </IconButton>
                       <IconButton onClick={() => this.props.openModal(item.id)} >
                         <Edit />
+                      </IconButton>
+                      <IconButton href={`/${item.category}/${item.id}`}>
+                        <Info />
                       </IconButton>
                       <IconButton onClick={event => this.handleDeleteButton("delete", item.id)}>
                         <DeleteForever />
