@@ -3,6 +3,7 @@ import SimpleAppBar from './AppBar';
 import { Route, withRouter } from 'react-router-dom';
 import PostList from './PostList';
 import PostDetail from './PostDetail';
+import Post from './Post'
 import { connect } from 'react-redux';
 import { 
   writePost, 
@@ -56,7 +57,7 @@ class App extends Component {
   }
   
   includeNewPost = (event) => {
-
+    
     const currentPost = {
       id        : uuidv1(),
       timestamp : Date.now(), 
@@ -68,11 +69,14 @@ class App extends Component {
       deleted   : this.state.deleted
     }
 
-    console.log(currentPost)
+    
+
+    console.log('includeNewPost', currentPost)
     if(currentPost.category===""){
+      console.log("you need to fill the category")
       return;
     }
-    console.log("including new post")
+    
 
     // insert post to redux-store
     this.props.insertPost(currentPost);
@@ -192,7 +196,7 @@ class App extends Component {
             <Button color="primary" aria-label="add" onClick={this.closeModal}>
               <Cancel />
             </Button>
-            <PostDetail postToEdit={this.state.postToEdit}/>
+              <Post />
           </div>
         </Modal>
 

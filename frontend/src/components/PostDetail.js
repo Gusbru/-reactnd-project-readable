@@ -2,40 +2,13 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { writePost } from '../actions';
-import TextField from 'material-ui/TextField';
-import MenuItem from 'material-ui/Menu/MenuItem';
-
+import Post from './Post';
 
 class PostDetail extends Component {  
 
-  state = {
-    id         : '',
-    timestamp  : '',
-    title      : '',
-    body       : '',
-    author     : '',
-    category   : '',
-    voteScore  : 1,
-    deleted    : false,
-    modalIsOpen: '',
-  };
-
-  componentWillReceiveProps(nextProps) {
-    // this.setState(this.props.info);
-    const id = nextProps.match.params.postId;
+  postToEdit = (id) => {
     const [postToEdit] = this.props.postList.filter(item => item.id === id);
-    console.log('[PostDetail] componentWillReceiveProps = ', postToEdit)
-    this.setState(postToEdit);
-  }
-
-  handlePostChange = name => event => {
-    this.setState({ 
-      [name] : event.target.value 
-    });
-  };
-
-  updatePost = (state) => {
-    this.setState(state)
+    return(postToEdit);
   }
 
   render(){
@@ -44,33 +17,7 @@ class PostDetail extends Component {
       <div>
         Editing post id {this.props.match.params.postId}
 
-        <div>
-          <TextField
-            id='title'
-            name='title'
-            label='Post Title'
-            value={this.state.title}
-            onChange={this.handlePostChange('title')}
-            margin="normal"
-            fullWidth
-          />
-          <br/>
-          <TextField 
-            id='category'
-            name='category'
-            select
-            label='Category:'
-            value={this.state.category}
-            onChange={this.handlePostChange('category')}
-            helperText="Please select a category"
-            margin="normal"
-          >
-            <MenuItem key="all" name="category" value='all' disabled>Category</MenuItem> 
-            <MenuItem key="react" name="category" value='react' selected>React</MenuItem> 
-            <MenuItem key="redux" name="category" value='redux'>Redux</MenuItem> 
-            <MenuItem key="udacity" name="category" value='udacity'>Udacity</MenuItem> 
-          </TextField>
-        </div>
+        <Post postToEdit={this.postToEdit(this.props.match.params.postId)}/>
 
       </div>
     );
