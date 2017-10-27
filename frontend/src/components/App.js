@@ -3,7 +3,8 @@ import SimpleAppBar from './AppBar';
 import { Route, withRouter } from 'react-router-dom';
 import PostList from './PostList';
 import PostDetail from './PostDetail';
-import Post from './Post'
+import NewPost from './NewPost'
+import If from './If';
 import { connect } from 'react-redux';
 import { 
   writePost, 
@@ -14,10 +15,6 @@ import {
   downPost,
 } from '../actions';
 import uuidv1 from 'uuid/v1';
-import Modal from 'react-modal';
-import Button from 'material-ui/Button';
-import Send from 'material-ui-icons/Send';
-import Cancel from 'material-ui-icons/Cancel';
 import './App.css';
 
 class App extends Component {
@@ -148,33 +145,32 @@ class App extends Component {
 
         <SimpleAppBar title="My Posts" categories={this.categories()}/>
         
-        <Route 
-          path='/'
+        <Route
           exact
+          path='/'
           render={() => (
             <PostList
-              handlePostClick={this.handlePostClick}
-              openModal={this.openModal}
               deletePost={this.removePost} 
               upVote={this.upVote}
               downVote={this.downVote} 
             />
         )}/>
+        {console.log(this.props.location.pathname, 'path')}
         
-        <Route 
-          path='/:category'
-          exact
-          render={({ match }) => (
-            <PostList
-              match={match}
-              handlePostClick={this.handlePostClick}
-              openModal={this.openModal}
-              deletePost={this.removePost} 
-              upVote={this.upVote}
-              downVote={this.downVote}
-            />
-          )}
-        />
+        <If test={this.props.location.pathname !== '/create'}>
+          <Route 
+            path='/:category'
+            exact
+            render={({ match }) => (
+              <PostList
+                match={match}
+                deletePost={this.removePost} 
+                upVote={this.upVote}
+                downVote={this.downVote}
+              />
+            )}
+          />
+        </If>
 
         <Route 
           path='/:category/:postId'
@@ -184,21 +180,13 @@ class App extends Component {
           )}
         />
 
-        <Modal
-          isOpen={this.state.modalIsOpen}
-          onRequestClose={this.closeModal}
-          contentLabel='Modal'>
-          <div>
-            <Button color="primary" aria-label="add" onClick={this.includeNewPost}>
-              <Send />
-            </Button>
-
-            <Button color="primary" aria-label="add" onClick={this.closeModal}>
-              <Cancel />
-            </Button>
-              <Post />
-          </div>
-        </Modal>
+        <Route
+          path='/create'
+          exact
+          render={() => (
+            <NewPost />
+          )}
+        />
 
       </div>
     );

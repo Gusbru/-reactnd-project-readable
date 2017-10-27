@@ -60,7 +60,7 @@ class PostList extends Component {
       <div>
 
         <div>
-          <Button fab color="primary" aria-label="add" onClick={this.props.openModal}>
+          <Button fab color="primary" aria-label="add" component={Link} to={'/create'}>
             <AddIcon />
           </Button>
         </div> 

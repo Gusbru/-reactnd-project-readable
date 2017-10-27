@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { writePost } from '../actions';
+import Post from './Post';
+import uuidv1 from 'uuid/v1';
+import Button from 'material-ui/Button';
+import Send from 'material-ui-icons/Send';
+import Cancel from 'material-ui-icons/Cancel';
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/Menu/MenuItem';
 
-
-class Post extends Component {
+class NewPost extends Component {
 
   state = {
     id         : '',
@@ -29,15 +35,51 @@ class Post extends Component {
     });
   };
 
-  updatePost = (state) => {
-    this.setState(state)
+  includeNewPost = (event) => {
+    
+    const currentPost = {
+      id        : uuidv1(),
+      timestamp : Date.now(), 
+      title     : this.state.title,
+      body      : this.state.body,
+      author    : this.state.author,
+      category  : this.state.category,
+      voteScore : this.state.voteScore,
+      deleted   : this.state.deleted
+    }
+
+    
+    if(currentPost.category===''){
+      console.log("you need to fill the category")
+      return;
+    }
+    
+    // insert post to redux-store
+    this.props.insertPost(currentPost);
+     
+    // back to main
+    this.props.history.push('/');
+     
   }
 
-  
+  cancelPost = () => {
+    this.props.history.push('/');
+  }
 
-  render() {
+  render(){
     return(
       <div>
+        <div>
+          <Button color="primary" aria-label="add" onClick={this.includeNewPost}>
+            <Send />
+          </Button>
+
+          <Button color="primary" aria-label="add" onClick={this.cancelPost}>
+            <Cancel />
+          </Button>
+        </div>
+        
+        <div>
         <div>
           <TextField
             id='title'
@@ -66,8 +108,17 @@ class Post extends Component {
           </TextField>
         </div>
       </div>
-    );
-  };
-};
 
-export default Post;
+      </div>
+    );
+  }
+}
+const mapDispatchToProps = (dispatch) => (
+  {
+    insertPost: (data) => dispatch(writePost(data)),
+  }
+)
+
+export default withRouter(
+  connect(null,mapDispatchToProps)(NewPost)
+);
