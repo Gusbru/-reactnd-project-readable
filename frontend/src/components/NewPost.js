@@ -35,7 +35,7 @@ class NewPost extends Component {
     });
   };
 
-  includeNewPost = (event) => {
+  includeNewPost = () => {
     
     const currentPost = {
       id        : uuidv1(),

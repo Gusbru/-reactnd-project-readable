@@ -37,63 +37,6 @@ class App extends Component {
     this.props.retrievePosts();
     this.props.retrieveCategories();
   }
-
-  openModal = (id) => {
-    console.log('opening the modal.....')
-    
-    this.setState(() => ({
-      modalIsOpen: true,
-      postToEdit: this.props.postList.find((element) => element.id === id)
-    }));
-  }
-
-  closeModal = () => {
-    this.setState(() => ({
-      modalIsOpen: false
-    }))
-  }
-  
-  includeNewPost = (event) => {
-    
-    const currentPost = {
-      id        : uuidv1(),
-      timestamp : Date.now(), 
-      title     : this.state.title,
-      body      : this.state.body,
-      author    : this.state.author,
-      category  : this.state.category,
-      voteScore : this.state.voteScore,
-      deleted   : this.state.deleted
-    }
-
-    
-
-    console.log('includeNewPost', currentPost)
-    if(currentPost.category===""){
-      console.log("you need to fill the category")
-      return;
-    }
-    
-
-    // insert post to redux-store
-    this.props.insertPost(currentPost);
-    
-    // update the local state
-    this.setState({
-      id           : '',
-      timestamp    : '', 
-      title        : '',
-      body         : '',
-      author       : '',
-      category     : '',
-      voteScore    : 1,
-      deleted      : false, 
-    });
-    
-    if (this.state.modalIsOpen) {
-      this.closeModal();
-    }  
-  }
   
 
   removePost = (id) => {
@@ -119,13 +62,6 @@ class App extends Component {
   downVote = (id) => {
     console.log('botao voto down', id)
     this.props.voteDownPost(id);
-  }
-
-  closeModal = () => {
-    console.log('close modal')
-    this.setState(() => ({
-      modalIsOpen: false
-    }))
   }
   
 
