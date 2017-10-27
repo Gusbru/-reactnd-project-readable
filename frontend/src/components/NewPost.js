@@ -3,6 +3,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { writePost } from '../actions';
 import uuidv1 from 'uuid/v1';
+import If from './If';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import Send from 'material-ui-icons/Send';
@@ -37,6 +38,7 @@ class NewPost extends Component {
     voteScore  : 0,
     deleted    : '',
     modalIsOpen: '',
+    numberOfTries: 0,
   };
 
   componentWillReceiveProps(nextProps) {
@@ -64,8 +66,11 @@ class NewPost extends Component {
     }
 
     
-    if(currentPost.category===''){
-      console.log("you need to fill the category")
+    if(currentPost.category === ''){
+      // number of tries
+      this.setState({
+        numberOfTries: this.state.numberOfTries+1
+      })
       return;
     }
     
@@ -74,7 +79,9 @@ class NewPost extends Component {
      
     // back to main
     this.props.history.push('/');
-     
+
+    
+    
   }
 
   cancelPost = () => {
@@ -84,16 +91,6 @@ class NewPost extends Component {
   render(){
     return(
       <div>
-        <div>
-          <Button color="primary" aria-label="add" onClick={this.includeNewPost}>
-            <Send />
-          </Button>
-
-          <Button color="primary" aria-label="add" onClick={this.cancelPost}>
-            <Cancel />
-          </Button>
-        </div>
-        
         <div>
         <div>
           <TextField
@@ -143,7 +140,24 @@ class NewPost extends Component {
           </TextField>
         </div>
       </div>
+      <div>
+          <Button 
+            raised
+            onClick={this.includeNewPost}>
+            Post
+          </Button>
 
+          <Button 
+            raised
+            onClick={this.cancelPost}>
+            Cancel
+          </Button>
+        </div>
+        <If test={this.state.category === '' && this.state.numberOfTries !== 0}>
+          <div>
+            Please insert a category.
+          </div>
+        </If>
       </div>
     );
   }

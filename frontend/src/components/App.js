@@ -112,7 +112,11 @@ class App extends Component {
           path='/:category/:postId'
           exact
           render={({ match }) => (
-            <PostDetail match={match}/>
+            <PostDetail 
+              match={match}
+              upVote={this.upVote}
+              downVote={this.downVote}
+            />
           )}
         />
 

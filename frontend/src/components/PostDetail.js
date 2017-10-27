@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { writePost } from '../actions';
+import { 
+  writePost,
+  updatePost,
+} from '../actions';
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/Menu/MenuItem';
 import Button from 'material-ui/Button';
@@ -52,19 +55,22 @@ class PostDetail extends Component {
     })
   }
 
+  detailsToUpdate = () => {
+    const data = {
+      id: this.state.id,
+      title: this.state.title,
+      body: this.state.body
+    }
+    this.props.editPost(data);
+  };
+
   render(){
 
     return(
       <div>
-        Editing post id {this.props.match.params.postId}
+        
         <div>
-          <Button color="primary" aria-label="add" onClick={this.updatePost}>
-            <Send />
-          </Button>
-
-          <Button color="primary" aria-label="add" onClick={this.cancelPost}>
-            <Cancel />
-          </Button>
+          Post Details
         </div>
 
         <div>
@@ -123,10 +129,10 @@ class PostDetail extends Component {
               value={this.state.voteScore}
               margin="normal"
             />
-            <IconButton >
+            <IconButton onClick={() => this.props.upVote(this.state.id)}>
               <AddCircle />
             </IconButton>
-            <IconButton >
+            <IconButton onClick={() => this.props.downVote(this.state.id)}>
               <RemoveCircle />
             </IconButton>
           </div>
@@ -137,8 +143,18 @@ class PostDetail extends Component {
             onClick={this.toggleEditing} >
             Edit
           </Button>
+          <Button
+            raised
+            onClick={this.detailsToUpdate}>
+            Save
+          </Button>
           <Button raised>
             Add Comment
+          </Button>
+          <Button 
+            raised 
+            onClick={this.cancelPost}>
+            Cancel
           </Button>
         </div>
 
@@ -156,6 +172,7 @@ const mapStateToProps = (myActions) => (
 const mapDispatchToProps = (dispatch) => (
   {
     insertPost: (data) => dispatch(writePost(data)),
+    editPost  : (data) => dispatch(updatePost(data)),
   }
 );
 

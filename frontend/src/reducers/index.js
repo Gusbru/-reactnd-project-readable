@@ -5,7 +5,8 @@ import {
   DELETE_POST,
   GET_CATEGORIES,
   POST_VOTE_UP,
-  POST_VOTE_DOWN
+  POST_VOTE_DOWN,
+  EDIT_POST,
 } from '../actions';
 
 const initialStatePosts = {
@@ -56,6 +57,15 @@ const postActions = (state = initialStatePosts, action) => {
         ...state,
         posts: [...postNewDown]
       };
+    case EDIT_POST:
+      const [postToEdit] = state.posts.filter(item => item.id === currentPost.id);
+      postToEdit.title = currentPost.title;
+      postToEdit.body = currentPost.body;
+      const newPosts = state.posts.map(item => item.id === currentPost.id ? postToEdit : item)
+      return {
+        ...state,
+        posts: [...newPosts]
+      }
     default:
       return state;
   }

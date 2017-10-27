@@ -5,6 +5,7 @@ import {
   deletePostAPI,
   postUpVoteAPI,
   postDownVoteAPI,
+  editPostAPI,
 } from '../utils/api';
 
 export const ADD_POST = 'ADD_POST';
@@ -12,6 +13,7 @@ export const DELETE_POST = 'DELETE_POST';
 export const GET_CATEGORIES = 'GET_CATEGORIES';
 export const POST_VOTE_UP = 'POST_VOTE_UP';
 export const POST_VOTE_DOWN = 'POST_VOTE_DOWN';
+export const EDIT_POST = 'EDIT_POST';
 
 // Get all posts from the server
 export const retrievePosts = () => async (dispatch) => {
@@ -75,9 +77,18 @@ export const upPost = (id) => async(dispatch) => {
 export const downPost = (id) => async(dispatch) => {
   try {
     await postDownVoteAPI(id);
-    dispatch(postVodeDown(id));
+    dispatch(postVoteDown(id));
   } catch(err) {
     console.log('Error voting down to a post...', err);
+  }
+}
+
+export const updatePost = (data) => async(dispatch) => {
+  try{
+    await editPostAPI(data);
+    dispatch(editPost(data));
+  } catch(err){
+    console.log('Error updating post...', err);
   }
 }
 
@@ -128,11 +139,22 @@ const postVoteUp = (id) => (
   }
 )
 
-const postVodeDown = (id) => (
+const postVoteDown = (id) => (
   {
     type: POST_VOTE_DOWN,
     post: {
       id
+    }
+  }
+)
+
+const editPost = (data) => (
+  {
+    type: EDIT_POST,
+    post: {
+      id: data.id,
+      title: data.title,
+      body: data.body,
     }
   }
 )
