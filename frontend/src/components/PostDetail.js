@@ -2,12 +2,15 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { writePost } from '../actions';
-import Post from './Post';
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/Menu/MenuItem';
 import Button from 'material-ui/Button';
 import Send from 'material-ui-icons/Send';
 import Cancel from 'material-ui-icons/Cancel';
+import AddIcon from 'material-ui-icons/Add';
+import IconButton from 'material-ui/IconButton';
+import AddCircle from 'material-ui-icons/AddCircle';
+import RemoveCircle from 'material-ui-icons/RemoveCircle';
 
 class PostDetail extends Component {  
 
@@ -20,7 +23,7 @@ class PostDetail extends Component {
     category   : '',
     voteScore  : '',
     deleted    : '',
-    modalIsOpen: '',
+    isEditing  : false,
   };
 
   componentWillReceiveProps(nextProps) {
@@ -36,15 +39,17 @@ class PostDetail extends Component {
 
   postToEdit = (id) => {
     const [postToEdit] = this.props.postList.filter(item => item.id === id);
-    return(postToEdit);
-  }
-
-  updatePost = () => {
-
+    return({...postToEdit, isEditing:false});
   }
 
   cancelPost = () => {
     this.props.history.push('/');
+  }
+
+  toggleEditing = () => {
+    this.setState({
+      isEditing: !this.state.isEditing
+    })
   }
 
   render(){
@@ -64,6 +69,7 @@ class PostDetail extends Component {
 
         <div>
           <TextField
+            disabled={!this.state.isEditing}
             id='title'
             name='title'
             label='Post Title'
@@ -73,7 +79,27 @@ class PostDetail extends Component {
             fullWidth
           />
           <br/>
-          <TextField 
+          <TextField
+            disabled={!this.state.isEditing}
+            id='body'
+            name='body'
+            label='Post Content'
+            value={this.state.body}
+            onChange={this.handlePostChange('body')}
+            margin="normal"
+            fullWidth
+          />
+          <TextField
+            disabled
+            id='author'
+            name='author'
+            label='Author Name'
+            value={this.state.author}
+            onChange={this.handlePostChange('author')}
+            margin="normal"
+          />
+          <TextField
+            disabled
             id='category'
             name='category'
             select
@@ -88,6 +114,32 @@ class PostDetail extends Component {
             <MenuItem key="redux" name="category" value='redux'>Redux</MenuItem> 
             <MenuItem key="udacity" name="category" value='udacity'>Udacity</MenuItem> 
           </TextField>
+          <div>
+            <TextField
+              disabled
+              id='voteScore'
+              name='voteScore'
+              label='Score'
+              value={this.state.voteScore}
+              margin="normal"
+            />
+            <IconButton >
+              <AddCircle />
+            </IconButton>
+            <IconButton >
+              <RemoveCircle />
+            </IconButton>
+          </div>
+        </div>
+        <div>
+          <Button 
+            raised
+            onClick={this.toggleEditing} >
+            Edit
+          </Button>
+          <Button raised>
+            Add Comment
+          </Button>
         </div>
 
       </div>

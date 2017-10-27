@@ -2,13 +2,28 @@ import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { writePost } from '../actions';
-import Post from './Post';
 import uuidv1 from 'uuid/v1';
+import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
 import Send from 'material-ui-icons/Send';
 import Cancel from 'material-ui-icons/Cancel';
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/Menu/MenuItem';
+
+const styles = theme => ({
+  container: {
+    display: 'flex',
+    flexWrap: 'wrap',
+  },
+  textField: {
+    marginLeft: theme.spacing.unit,
+    marginRight: theme.spacing.unit,
+    width: 200,
+  },
+  menu: {
+    width: 600,
+  },
+});
 
 class NewPost extends Component {
 
@@ -19,7 +34,7 @@ class NewPost extends Component {
     body       : '',
     author     : '',
     category   : '',
-    voteScore  : '',
+    voteScore  : 0,
     deleted    : '',
     modalIsOpen: '',
   };
@@ -91,6 +106,25 @@ class NewPost extends Component {
             fullWidth
           />
           <br/>
+          <TextField
+            id='body'
+            name='body'
+            label='Post Content'
+            multiline
+            rowsMax="4"
+            value={this.state.body}
+            onChange={this.handlePostChange('body')}
+            margin="normal"
+            fullWidth
+          />
+          <TextField
+            id='author'
+            name='author'
+            label='Author Name'
+            value={this.state.author}
+            onChange={this.handlePostChange('author')}
+            margin="normal"
+          />
           <TextField 
             id='category'
             name='category'
@@ -100,6 +134,7 @@ class NewPost extends Component {
             onChange={this.handlePostChange('category')}
             helperText="Please select a category"
             margin="normal"
+            style={{menu: {width: 600}}}
           >
             <MenuItem key="all" name="category" value='all' disabled>Category</MenuItem> 
             <MenuItem key="react" name="category" value='react' selected>React</MenuItem> 
@@ -120,5 +155,7 @@ const mapDispatchToProps = (dispatch) => (
 )
 
 export default withRouter(
-  connect(null,mapDispatchToProps)(NewPost)
+  withStyles(styles)(
+    connect(null,mapDispatchToProps)(NewPost)
+  )
 );

@@ -111,11 +111,34 @@ export const postDownVoteAPI = async (id) => (
         'Authorization': 'whatever-you-want',
         'Content-Type' : 'application/json'
       },
-      body: JSON.stringify({
-        option: "downVote"
-      })
+      body: JSON.stringify(
+        {
+          option: "downVote"
+        }
+      )
     }
   )
   .then((res) => res.json())
   .catch(err => console.error('Error computing downVote to server ->', err))
 );
+
+export const editPostAPI = async (data) => (
+  await fetch(
+    url + `/posts/${data.id}`,
+    {
+      method: 'PUT',
+      headers: { 
+        'Authorization': 'whatever-you-want',
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify(
+        {
+          title: data.title,
+          body: data.body
+        }
+      )
+    }
+  )
+  .then(res => res.json())
+  .catch(err => console.error('Error editing post on the server ->', err))
+)

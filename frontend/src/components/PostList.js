@@ -99,7 +99,6 @@ class PostList extends Component {
                       <IconButton onClick={(event) => this.handleVote("downVote", item.id)}>
                         <RemoveCircle />
                       </IconButton>
-                      
                       <IconButton href={`/${item.category}/${item.id}`}>
                         <Info />
                       </IconButton>
