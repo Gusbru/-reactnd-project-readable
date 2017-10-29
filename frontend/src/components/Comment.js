@@ -7,6 +7,7 @@ import IconButton from 'material-ui/IconButton';
 import AddCircle from 'material-ui-icons/AddCircle';
 import RemoveCircle from 'material-ui-icons/RemoveCircle';
 import DeleteForever from 'material-ui-icons/DeleteForever';
+import { formatDate } from '../utils/formatDate';
 
 class Comment extends Component {
 
@@ -36,7 +37,7 @@ class Comment extends Component {
                   <TableRow key={item.id} hover>
                     <TableCell>{item.body}</TableCell>
                     <TableCell>{item.author}</TableCell>
-                    <TableCell>{item.timestamp}</TableCell>
+                    <TableCell>{formatDate(item.timestamp)}</TableCell>
                     <TableCell></TableCell>
                     <TableCell>
                       <IconButton >

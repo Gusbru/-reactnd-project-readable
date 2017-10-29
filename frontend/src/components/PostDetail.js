@@ -32,8 +32,6 @@ class PostDetail extends Component {
 
   componentWillReceiveProps(nextProps) {
     const currentPostId = this.props.match.params.postId;
-    console.log('[PostDetail] componentWillReceiveProps = ', currentPostId)
-    
     this.setState(this.postToEdit(currentPostId));
   }
 
@@ -46,10 +44,6 @@ class PostDetail extends Component {
   postToEdit = (id) => {
     const [postToEdit] = this.props.postList.filter(item => item.id === id);
     return({...postToEdit, isEditing:false});
-  }
-
-  currentPostComments = () => {
-
   }
 
   cancelPost = () => {
@@ -82,8 +76,7 @@ class PostDetail extends Component {
 
   render(){
 
-    const comments = this.props.commentList.filter(item => item.parentId === this.state.id);
-    console.log(comments)
+    
 
     return(
       <div>

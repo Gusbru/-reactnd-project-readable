@@ -10,6 +10,7 @@ import AddCircle from 'material-ui-icons/AddCircle';
 import RemoveCircle from 'material-ui-icons/RemoveCircle';
 import DeleteForever from 'material-ui-icons/DeleteForever';
 import Info from 'material-ui-icons/Info';
+import { formatDate } from '../utils/formatDate';
 
 
 class PostList extends Component {
@@ -38,19 +39,6 @@ class PostList extends Component {
     this.props.countComments(id)
   }
   
-
-  formatDate = (milliseconds) => {
-    const dataFormated = new Date(milliseconds);
-    const day = dataFormated.getDate();
-    const month = dataFormated.getMonth()+1;
-    const year = dataFormated.getFullYear();
-    const hour = dataFormated.getHours();
-    const minutes = dataFormated.getMinutes();
-    const seconds = dataFormated.getSeconds();
-    return(
-      `${day}/${month}/${year} at ${hour}:${minutes}:${seconds}`
-    )
-  }
 
   render() {
     const filterCategory = this.props.match.params.category ? this.props.match.params.category : "All";
@@ -96,7 +84,7 @@ class PostList extends Component {
                     <TableCell>{item.author}</TableCell>
                     <TableCell>{item.numberComments}</TableCell>
                     <TableCell>{item.category}</TableCell>
-                    <TableCell>{this.formatDate(item.timestamp)}</TableCell>
+                    <TableCell>{formatDate(item.timestamp)}</TableCell>
                     <TableCell>
                       {item.voteScore}
                     </TableCell>

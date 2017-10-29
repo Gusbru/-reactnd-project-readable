@@ -1,4 +1,5 @@
 const url = 'http://localhost:3001';
+// const url = 'http://10.1.1.10:3001';
 
 export const fetchPosts = async () => (
   await fetch(
