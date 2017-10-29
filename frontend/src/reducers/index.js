@@ -9,6 +9,7 @@ import {
   EDIT_POST,
   GET_COMMENTS,
   NUMBER_OF_COMMENTS,
+  NEW_COMMENT,
 } from '../actions';
 
 const initialStatePosts = {
@@ -110,6 +111,11 @@ const commentActions = (state = initialStateComments, action) => {
         ...state, 
         replies: [...state.replies, currentComment]
       };
+    case NEW_COMMENT:
+      return{
+        ...state,
+        replies: [...state.replies, currentComment]
+      }
     default:
       return state;
   }

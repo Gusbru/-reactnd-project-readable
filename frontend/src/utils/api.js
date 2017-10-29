@@ -158,3 +158,27 @@ export const fetchPostCommentAPI = async (id) => (
   .then(res => res.json())
   .catch(err => console.error('Error fetching post comment from server ->', err))
 );
+
+export const addPostCommentAPI = async (data, postId) => (
+  await fetch(
+    url + '/comments',
+    {
+      method: 'POST',
+      headers: { 
+        'Authorization': 'whatever-you-want',
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify(
+        {
+          id: data.id,
+          timestamp: data.timestamp,
+          body: data.body,
+          author: data.author,
+          parentId: postId
+        }
+      )
+    }
+  )
+  .then(res => res.json())
+  .catch(err => console.error('Error writing new post to server ->', err))
+)

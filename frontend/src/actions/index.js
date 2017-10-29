@@ -7,16 +7,18 @@ import {
   postDownVoteAPI,
   editPostAPI,
   fetchPostCommentAPI,
+  addPostCommentAPI,
 } from '../utils/api';
 
-export const ADD_POST = 'ADD_POST';
-export const DELETE_POST = 'DELETE_POST';
-export const GET_CATEGORIES = 'GET_CATEGORIES';
-export const POST_VOTE_UP = 'POST_VOTE_UP';
-export const POST_VOTE_DOWN = 'POST_VOTE_DOWN';
-export const EDIT_POST = 'EDIT_POST';
-export const GET_COMMENTS = 'GET_COMMENTS';
+export const ADD_POST           = 'ADD_POST';
+export const DELETE_POST        = 'DELETE_POST';
+export const GET_CATEGORIES     = 'GET_CATEGORIES';
+export const POST_VOTE_UP       = 'POST_VOTE_UP';
+export const POST_VOTE_DOWN     = 'POST_VOTE_DOWN';
+export const EDIT_POST          = 'EDIT_POST';
+export const GET_COMMENTS       = 'GET_COMMENTS';
 export const NUMBER_OF_COMMENTS = 'NUMBER_OF_COMMENTS';
+export const NEW_COMMENT        = 'NEW_COMMENT'
 
 // Get all posts from the server
 export const retrievePosts = () => async (dispatch) => {
@@ -103,6 +105,7 @@ export const retrieveCategories = () => async (dispatch) => {
   }
 }
 
+// get the comments for a single post
 export const fetchCommentForPost = (id) => async(dispatch) => {
   console.log('[actions]Trying to get the comments');
   try{
@@ -120,6 +123,16 @@ export const fetchCommentForPost = (id) => async(dispatch) => {
   }
 }
 
+export const createNewComment = (data, postId) => async(dispatch) => {
+  console.log('[actions]Trying to publish a new comment');
+  try{
+    await addPostCommentAPI(data, postId);
+    dispatch(newComment(data, postId));
+    dispatch(numberOfComments(postId));
+  }catch(err){
+    console.error('Error writting post comment...', err);
+  }
+}
 
 
 const addPost = ({ id, timestamp, title, body, author, category, voteScore, deleted }) => (
@@ -172,9 +185,9 @@ const editPost = (data) => (
   {
     type: EDIT_POST,
     post: {
-      id: data.id,
+      id   : data.id,
       title: data.title,
-      body: data.body,
+      body : data.body,
     }
   }
 )
@@ -193,11 +206,11 @@ const getComment = (data) => (
   {
     type: GET_COMMENTS,
     comment: {
-      id: data.id,
-      parentId: data.parentId,
+      id       : data.id,
+      parentId : data.parentId,
       timestamp: data.timestamp,
-      body: data.body,
-      author: data.author
+      body     : data.body,
+      author   : data.author
     }
   }
 )
@@ -207,6 +220,19 @@ const numberOfComments = (postId) => (
     type: NUMBER_OF_COMMENTS,
     post: {
       id: postId,
+    }
+  }
+)
+
+const newComment = (data, postId) => (
+  {
+    type: NEW_COMMENT,
+    comment: {
+      id       : data.id,
+      parentId : postId,
+      timestamp: data.timestamp,
+      body     : data.body,
+      author   : data.author,
     }
   }
 )

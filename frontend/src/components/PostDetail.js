@@ -175,9 +175,7 @@ class PostDetail extends Component {
             onClick={this.detailsToUpdate}>
             Save
           </Button>
-          <Button raised>
-            Add New Comment
-          </Button>
+          
           <Button 
             raised 
             onClick={this.cancelPost}>

@@ -35,12 +35,11 @@ class NewPost extends Component {
     category   : '',
     voteScore  : 0,
     deleted    : '',
-    modalIsOpen: '',
     numberOfTries: 0,
   };
 
   componentWillReceiveProps(nextProps) {
-    console.log('[PostDetail] componentWillReceiveProps = ', nextProps.postToEdit)
+    console.log('[NewPost] componentWillReceiveProps = ', nextProps.postToEdit)
     this.setState(nextProps.postToEdit);
   }
 
@@ -72,14 +71,12 @@ class NewPost extends Component {
       return;
     }
     
-    // insert post to redux-store
+    // dispatch post to redux-store
     this.props.insertPost(currentPost);
      
     // back to main
     this.props.history.push('/');
 
-    
-    
   }
 
   cancelPost = () => {
