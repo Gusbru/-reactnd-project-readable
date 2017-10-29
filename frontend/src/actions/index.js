@@ -6,6 +6,7 @@ import {
   postUpVoteAPI,
   postDownVoteAPI,
   editPostAPI,
+  fetchPostCommentAPI,
 } from '../utils/api';
 
 export const ADD_POST = 'ADD_POST';
@@ -14,6 +15,7 @@ export const GET_CATEGORIES = 'GET_CATEGORIES';
 export const POST_VOTE_UP = 'POST_VOTE_UP';
 export const POST_VOTE_DOWN = 'POST_VOTE_DOWN';
 export const EDIT_POST = 'EDIT_POST';
+export const GET_COMMENT = 'GET_COMMENT';
 
 // Get all posts from the server
 export const retrievePosts = () => async (dispatch) => {
@@ -25,19 +27,6 @@ export const retrievePosts = () => async (dispatch) => {
     ));
   } catch(err) {
     console.error("Error retrieving posts...", err);
-  }
-}
-
-// Get all categories from the server
-export const retrieveCategories = () => async (dispatch) => {
-  console.log('[actions]Trying to retrieve the categories...');
-  try{
-    const {categories} = await fetchCategories();
-    categories.map((item) => (
-      dispatch(addCategory(item))
-    ));
-  } catch(err) {
-    console.error("Error retrieving categories...", err);
   }
 }
 
@@ -83,6 +72,7 @@ export const downPost = (id) => async(dispatch) => {
   }
 }
 
+// update an existing post in the server
 export const updatePost = (data) => async(dispatch) => {
   try{
     await editPostAPI(data);
@@ -92,7 +82,18 @@ export const updatePost = (data) => async(dispatch) => {
   }
 }
 
-
+// Get all categories from the server
+export const retrieveCategories = () => async (dispatch) => {
+  console.log('[actions]Trying to retrieve the categories...');
+  try{
+    const {categories} = await fetchCategories();
+    categories.map((item) => (
+      dispatch(addCategory(item))
+    ));
+  } catch(err) {
+    console.error("Error retrieving categories...", err);
+  }
+}
 
 const addPost = ({ id, timestamp, title, body, author, category, voteScore, deleted }) => (
   {
@@ -110,15 +111,6 @@ const addPost = ({ id, timestamp, title, body, author, category, voteScore, dele
   }
 );
 
-const addCategory = (item) => (
-  {
-    type: GET_CATEGORIES,
-    categories: {
-      name: item.name,
-      path: item.path
-    }
-  }
-)
 
 const deletePost = (id) => (
   {
@@ -156,5 +148,22 @@ const editPost = (data) => (
       title: data.title,
       body: data.body,
     }
+  }
+)
+
+const addCategory = (data) => (
+  {
+    type: GET_CATEGORIES,
+    categories: {
+      name: data.name,
+      path: data.path
+    }
+  }
+)
+
+const getComment = (data) => (
+  {
+    type: GET_COMMENT,
+    
   }
 )

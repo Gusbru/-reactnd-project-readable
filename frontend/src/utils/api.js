@@ -142,3 +142,18 @@ export const editPostAPI = async (data) => (
   .then(res => res.json())
   .catch(err => console.error('Error editing post on the server ->', err))
 )
+
+export const fetchPostCommentAPI = async (id) => (
+  await fetch(
+    url + `/posts/${id}/comments`,
+    {
+      method: 'GET',
+      headers: { 
+        'Authorization': 'whatever-you-want',
+        'Content-Type' : 'application/json'
+      }
+    }
+  )
+  .then(res => res.json())
+  .catch(err => console.error('Error fetching post comment from server ->', err))
+);
