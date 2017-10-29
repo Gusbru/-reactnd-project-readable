@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import If from './If';
-import { createNewComment } from '../actions';
+import { 
+  createNewComment,
+  upComment,
+} from '../actions';
 import uuidv1 from 'uuid/v1';
 import Paper from 'material-ui/Paper';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
@@ -10,7 +13,7 @@ import AddCircle from 'material-ui-icons/AddCircle';
 import RemoveCircle from 'material-ui-icons/RemoveCircle';
 import DeleteForever from 'material-ui-icons/DeleteForever';
 import { formatDate } from '../utils/formatDate';
-import Modal from 'react-modal'
+import Modal from 'react-modal';
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 
@@ -81,6 +84,19 @@ class Comment extends Component {
     this.setState({modalIsOpen: false});
   }
 
+  handleVote = (event, id) => {
+    switch(event) {
+      case "upVote":
+        this.props.upVoteComment(id);
+        break;
+      case "downVote":
+        //this.props.downVote(id);
+        break;
+      default:
+        break;
+    }
+  }
+
 
   render(){
 
@@ -96,6 +112,9 @@ class Comment extends Component {
           onClick={this.openModal}>
           Add New Comment
         </Button>
+        <div>
+          This post have {comments.length ? comments.length : '0 (zero)'} comments
+        </div>
         <If test={comments.length !== 0}>
           <Paper>
             <Table>
@@ -116,7 +135,7 @@ class Comment extends Component {
                     <TableCell>{formatDate(item.timestamp)}</TableCell>
                     <TableCell></TableCell>
                     <TableCell>
-                      <IconButton >
+                      <IconButton onClick={(event) => this.handleVote('upVote', item.id)}>
                         <AddCircle />
                       </IconButton>
                       <IconButton >
@@ -181,7 +200,7 @@ class Comment extends Component {
     )
   }
 
-}
+};
 
 const mapStateToProps = (myActions) => (
   {
@@ -191,8 +210,9 @@ const mapStateToProps = (myActions) => (
 
 const mapDispatchToProps = (dispatch) => (
   {
-    insertComment: (data, postId) => dispatch(createNewComment(data, postId))
+    insertComment: (data, postId) => dispatch(createNewComment(data, postId)),
+    upVoteComment: (commentId) => dispatch(upComment(commentId)),
   }
-)
+);
 
 export default connect(mapStateToProps,mapDispatchToProps)(Comment);

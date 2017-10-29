@@ -8,6 +8,7 @@ import {
   editPostAPI,
   fetchPostCommentAPI,
   addPostCommentAPI,
+  commentVoteUpAPI,
 } from '../utils/api';
 
 export const ADD_POST           = 'ADD_POST';
@@ -18,7 +19,8 @@ export const POST_VOTE_DOWN     = 'POST_VOTE_DOWN';
 export const EDIT_POST          = 'EDIT_POST';
 export const GET_COMMENTS       = 'GET_COMMENTS';
 export const NUMBER_OF_COMMENTS = 'NUMBER_OF_COMMENTS';
-export const NEW_COMMENT        = 'NEW_COMMENT'
+export const NEW_COMMENT        = 'NEW_COMMENT';
+export const COMMENT_VOTE_UP    = 'COMMENT_VOTE_UP';
 
 // Get all posts from the server
 export const retrievePosts = () => async (dispatch) => {
@@ -32,45 +34,43 @@ export const retrievePosts = () => async (dispatch) => {
     //get the comments for each post
     posts.map((item) => (
       dispatch(fetchCommentForPost(item.id))
-    )
-      
-    )
+    ));
   } catch(err) {
     console.error("Error retrieving posts...", err);
-  }
-}
+  };
+};
 
 // Write post to server
 export const writePost = (data) => async(dispatch) => {
   console.log('[action]Adding a post...');
-  try{
+  try {
     await writePostAPI(data);
     dispatch(addPost(data));
-  } catch(err){
+  } catch(err) {
     console.log("Error writing post to server...", err);
-  }
-}
+  };
+};
 
 //Removing post from the server
 export const rmPost = (id) => async(dispatch) => {
   console.log('[action]Removing a post...');
-  try{
+  try {
     const postRemoved = await deletePostAPI(id);
     dispatch(deletePost(postRemoved.id));
-  }catch(err){
+  } catch(err) {
     console.error('Error removing post...', err);
   };
-}
+};
 
 //Vote up to a post
 export const upPost = (id) => async(dispatch) => {
-  try{
+  try {
     await postUpVoteAPI(id);
     dispatch(postVoteUp(id));
   } catch(err) {
     console.log('Error voting up to a post...', err);
-  }
-}
+  };
+};
 
 // Vote down to a post
 export const downPost = (id) => async(dispatch) => {
@@ -79,36 +79,36 @@ export const downPost = (id) => async(dispatch) => {
     dispatch(postVoteDown(id));
   } catch(err) {
     console.log('Error voting down to a post...', err);
-  }
-}
+  };
+};
 
 // update an existing post in the server
 export const updatePost = (data) => async(dispatch) => {
-  try{
+  try {
     await editPostAPI(data);
     dispatch(editPost(data));
-  } catch(err){
+  } catch(err) {
     console.log('Error updating post...', err);
-  }
-}
+  };
+};
 
 // Get all categories from the server
 export const retrieveCategories = () => async (dispatch) => {
   console.log('[actions]Trying to retrieve the categories...');
-  try{
+  try {
     const {categories} = await fetchCategories();
     categories.map((item) => (
       dispatch(addCategory(item))
     ));
   } catch(err) {
     console.error("Error retrieving categories...", err);
-  }
-}
+  };
+};
 
 // get the comments for a single post
 export const fetchCommentForPost = (id) => async(dispatch) => {
   console.log('[actions]Trying to get the comments');
-  try{
+  try {
     const comments = await fetchPostCommentAPI(id);
     comments.map(item => (
       dispatch(getComment(item))
@@ -117,22 +117,32 @@ export const fetchCommentForPost = (id) => async(dispatch) => {
     comments.map(item => (
       dispatch(numberOfComments(item.parentId))
     ));
-
-  }catch(err){
+  } catch(err) {
     console.error('Error retrieving post comment...', err);
-  }
-}
+  };
+};
 
+// Create a new comment
 export const createNewComment = (data, postId) => async(dispatch) => {
   console.log('[actions]Trying to publish a new comment');
-  try{
+  try {
     await addPostCommentAPI(data, postId);
     dispatch(newComment(data, postId));
     dispatch(numberOfComments(postId));
-  }catch(err){
+  } catch(err) {
     console.error('Error writting post comment...', err);
-  }
-}
+  };
+};
+
+//Vote up to a comment
+export const upComment = (id) => async(dispatch) => {
+  try {
+    await commentVoteUpAPI(id);
+    dispatch(commentVoteUp(id));
+  } catch(err) {
+    console.log('Error voting up to a comment...', err);
+  };
+};
 
 
 const addPost = ({ id, timestamp, title, body, author, category, voteScore, deleted }) => (
@@ -170,7 +180,7 @@ const postVoteUp = (id) => (
       id
     }
   }
-)
+);
 
 const postVoteDown = (id) => (
   {
@@ -179,7 +189,7 @@ const postVoteDown = (id) => (
       id
     }
   }
-)
+);
 
 const editPost = (data) => (
   {
@@ -190,7 +200,7 @@ const editPost = (data) => (
       body : data.body,
     }
   }
-)
+);
 
 const addCategory = (data) => (
   {
@@ -200,7 +210,7 @@ const addCategory = (data) => (
       path: data.path
     }
   }
-)
+);
 
 const getComment = (data) => (
   {
@@ -213,7 +223,7 @@ const getComment = (data) => (
       author   : data.author
     }
   }
-)
+);
 
 const numberOfComments = (postId) => (
   {
@@ -222,7 +232,7 @@ const numberOfComments = (postId) => (
       id: postId,
     }
   }
-)
+);
 
 const newComment = (data, postId) => (
   {
@@ -235,4 +245,13 @@ const newComment = (data, postId) => (
       author   : data.author,
     }
   }
-)
+);
+
+const commentVoteUp = (id) => (
+  {
+    type: COMMENT_VOTE_UP,
+    post: {
+      id,
+    }
+  }
+);

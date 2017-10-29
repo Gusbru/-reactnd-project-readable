@@ -1,5 +1,4 @@
 import { combineReducers } from 'redux';
-
 import {
   ADD_POST,
   DELETE_POST,
@@ -10,6 +9,7 @@ import {
   GET_COMMENTS,
   NUMBER_OF_COMMENTS,
   NEW_COMMENT,
+  COMMENT_VOTE_UP,
 } from '../actions';
 
 const initialStatePosts = {
@@ -116,6 +116,21 @@ const commentActions = (state = initialStateComments, action) => {
         ...state,
         replies: [...state.replies, currentComment]
       }
+    case COMMENT_VOTE_UP:
+    const [commentUp] = state.replies.filter(item => item.id === currentComment.id);
+    console.log(commentUp)
+    if (combineReducers.hasOwnProperty('voteScore')){
+      commentUp.voteScore++;
+    } else {
+      commentUp.voteScore = 1
+    }
+    const commentNewUp = state.replies.map(item => (
+      item.id === currentComment.id ? commentUp : item
+    ))
+    return {
+      ...state,
+      replies: [...commentNewUp]
+    };
     default:
       return state;
   }
