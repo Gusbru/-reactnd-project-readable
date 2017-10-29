@@ -14,6 +14,7 @@ import AddIcon from 'material-ui-icons/Add';
 import IconButton from 'material-ui/IconButton';
 import AddCircle from 'material-ui-icons/AddCircle';
 import RemoveCircle from 'material-ui-icons/RemoveCircle';
+import Snackbar from 'material-ui/Snackbar';
 
 class PostDetail extends Component {  
 
@@ -27,6 +28,7 @@ class PostDetail extends Component {
     voteScore  : '',
     deleted    : '',
     isEditing  : false,
+    snackbarOpen: false,
   };
 
   componentWillReceiveProps(nextProps) {
@@ -59,9 +61,12 @@ class PostDetail extends Component {
     const data = {
       id: this.state.id,
       title: this.state.title,
-      body: this.state.body
+      body: this.state.body,
     }
     this.props.editPost(data);
+    this.setState({
+      snackbarOpen: true
+    })
   };
 
   doneEditing = () => {
@@ -148,6 +153,16 @@ class PostDetail extends Component {
             onClick={this.doneEditing}>
               Ok
           </Button>
+          <Snackbar 
+            anchorOrigin={{
+              vertical : 'bottom',
+              horizontal: 'left'
+            }}
+            open={this.state.snackbarOpen}
+            autoHideDuration={5000}
+            onRequestClose={() => this.setState({snackbarOpen:false})}
+            message={<span>Post Saved!</span>}
+          />
           <Button 
             raised
             onClick={this.toggleEditing} >
