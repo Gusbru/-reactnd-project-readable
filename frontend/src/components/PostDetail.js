@@ -183,7 +183,7 @@ class PostDetail extends Component {
             Save
           </Button>
           <Button raised>
-            Add Comment
+            Add New Comment
           </Button>
           <Button 
             raised 

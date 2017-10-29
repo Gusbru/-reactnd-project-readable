@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import If from './If';
 import Paper from 'material-ui/Paper';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+import IconButton from 'material-ui/IconButton';
+import AddCircle from 'material-ui-icons/AddCircle';
+import RemoveCircle from 'material-ui-icons/RemoveCircle';
+import DeleteForever from 'material-ui-icons/DeleteForever';
 
 class Comment extends Component {
 
@@ -24,6 +27,8 @@ class Comment extends Component {
                   <TableCell>Comment</TableCell>
                   <TableCell>Author</TableCell>
                   <TableCell>Date</TableCell>
+                  <TableCell>Comment Score</TableCell>
+                  <TableCell>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -32,6 +37,18 @@ class Comment extends Component {
                     <TableCell>{item.body}</TableCell>
                     <TableCell>{item.author}</TableCell>
                     <TableCell>{item.timestamp}</TableCell>
+                    <TableCell></TableCell>
+                    <TableCell>
+                      <IconButton >
+                        <AddCircle />
+                      </IconButton>
+                      <IconButton >
+                        <RemoveCircle />
+                      </IconButton>
+                      <IconButton>
+                        <DeleteForever />
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
