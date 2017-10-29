@@ -13,8 +13,8 @@ import {
   retrieveCategories,
   upPost,
   downPost,
+  fetchCommentForPost,
 } from '../actions';
-import uuidv1 from 'uuid/v1';
 import './App.css';
 
 class App extends Component {
@@ -71,6 +71,10 @@ class App extends Component {
       item.name
     ))
   )
+
+  fetchComment = (id) => {
+    this.props.retrieveComments(id)
+  }
   
   render() {
     //console.log('Props', this.props);
@@ -128,6 +132,8 @@ class App extends Component {
           )}
         />
 
+        <button onClick={() => this.fetchComment('8xf0y6ziyjabvozdd253nd')}>get comment</button>
+
       </div>
     );
   }
@@ -138,7 +144,7 @@ const mapStateToProps = (myActions) => (
   {
     postList: myActions.postActions.posts,
     categoryList: myActions.categoryActions.categories,
-    // commentList: postList.comment
+    commentList: myActions.commentActions.replies,
   }
 )
 
@@ -150,6 +156,7 @@ const mapDispatchToProps = (dispatch) => (
     retrieveCategories: () => dispatch(retrieveCategories()),
     voteUpPost: (id) => dispatch(upPost(id)),
     voteDownPost: (id) => dispatch(downPost(id)),
+    retrieveComments: (id) => dispatch(fetchCommentForPost(id)),
   }
 )
 

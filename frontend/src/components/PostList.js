@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Route, Link, withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import Paper from 'material-ui/Paper';
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import Button from 'material-ui/Button';
@@ -10,7 +10,6 @@ import AddCircle from 'material-ui-icons/AddCircle';
 import RemoveCircle from 'material-ui-icons/RemoveCircle';
 import DeleteForever from 'material-ui-icons/DeleteForever';
 import Info from 'material-ui-icons/Info';
-import Edit from 'material-ui-icons/Edit';
 
 
 class PostList extends Component {
@@ -33,6 +32,10 @@ class PostList extends Component {
       default:
         break;
     }
+  }
+
+  fetchCommentNumber = (id) => {
+    this.props.countComments(id)
   }
   
 
@@ -72,8 +75,10 @@ class PostList extends Component {
             <TableHead>
               <TableRow>
                 <TableCell>Title</TableCell>
-                <TableCell>Category</TableCell>
                 <TableCell>Author</TableCell>
+                <TableCell># of Comments</TableCell>
+                <TableCell>Category</TableCell>
+                
                 <TableCell>Date</TableCell>
                 <TableCell>Score</TableCell>
                 <TableCell>Actions</TableCell>
@@ -86,8 +91,9 @@ class PostList extends Component {
                     value={item.id}
                     hover>
                     <TableCell>{item.title}</TableCell>
-                    <TableCell>{item.category}</TableCell>
                     <TableCell>{item.author}</TableCell>
+                    <TableCell>{item.numberComments}</TableCell>
+                    <TableCell>{item.category}</TableCell>
                     <TableCell>{this.formatDate(item.timestamp)}</TableCell>
                     <TableCell>
                       {item.voteScore}

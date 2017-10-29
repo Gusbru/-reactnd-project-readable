@@ -15,7 +15,8 @@ export const GET_CATEGORIES = 'GET_CATEGORIES';
 export const POST_VOTE_UP = 'POST_VOTE_UP';
 export const POST_VOTE_DOWN = 'POST_VOTE_DOWN';
 export const EDIT_POST = 'EDIT_POST';
-export const GET_COMMENT = 'GET_COMMENT';
+export const GET_COMMENTS = 'GET_COMMENTS';
+export const NUMBER_OF_COMMENTS = 'NUMBER_OF_COMMENTS';
 
 // Get all posts from the server
 export const retrievePosts = () => async (dispatch) => {
@@ -95,6 +96,31 @@ export const retrieveCategories = () => async (dispatch) => {
   }
 }
 
+export const fetchCommentForPost = (id) => async(dispatch) => {
+  console.log('[actions]Trying to get the comments');
+  try{
+    const comments = await fetchPostCommentAPI(id);
+    comments.map(item => (
+      dispatch(getComment(item))
+    ))
+    console.log('[actions-fetchCommentForPost]',comments);
+  }catch(err){
+    console.error('Error retrieving post comment...', err);
+  }
+}
+
+export const getNumberOfComments = (id) => async(dispatch) => {
+  try{
+    const comments = await fetchPostCommentAPI(id);
+    comments.map((item) => (
+      dispatch(numberOfComments(id))
+    ))
+
+  }catch(err){
+    console.log('Error counting the number of comments...', err);
+  }
+}
+
 const addPost = ({ id, timestamp, title, body, author, category, voteScore, deleted }) => (
   {
     type: ADD_POST,
@@ -106,7 +132,8 @@ const addPost = ({ id, timestamp, title, body, author, category, voteScore, dele
       author,
       category,
       voteScore,
-      deleted
+      deleted,
+      numberComments: 0
     }
   }
 );
@@ -163,7 +190,23 @@ const addCategory = (data) => (
 
 const getComment = (data) => (
   {
-    type: GET_COMMENT,
-    
+    type: GET_COMMENTS,
+    comment: {
+      id: data.id,
+      parentId: data.parentId,
+      timestamp: data.timestamp,
+      body: data.body,
+      author: data.author
+    }
+  }
+)
+
+const numberOfComments = (postId) => (
+  {
+    type: NUMBER_OF_COMMENTS,
+    post: {
+      id: postId,
+      numberComments: 0
+    }
   }
 )

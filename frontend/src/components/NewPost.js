@@ -1,13 +1,11 @@
 import React, { Component } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { writePost } from '../actions';
 import uuidv1 from 'uuid/v1';
 import If from './If';
 import { withStyles } from 'material-ui/styles';
 import Button from 'material-ui/Button';
-import Send from 'material-ui-icons/Send';
-import Cancel from 'material-ui-icons/Cancel';
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/Menu/MenuItem';
 

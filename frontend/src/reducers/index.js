@@ -7,17 +7,23 @@ import {
   POST_VOTE_UP,
   POST_VOTE_DOWN,
   EDIT_POST,
+  GET_COMMENTS,
+  NUMBER_OF_COMMENTS,
 } from '../actions';
 
 const initialStatePosts = {
-  users: {},
   posts: [],
-  replies: [],
 }
 
 const initialStateCategories = {
-  categories: []
+  categories: [],
 }
+
+const initialStateComments = {
+  replies: [],
+}
+
+
 
 
 const postActions = (state = initialStatePosts, action) => {
@@ -66,6 +72,16 @@ const postActions = (state = initialStatePosts, action) => {
         ...state,
         posts: [...newPosts]
       }
+    case NUMBER_OF_COMMENTS:
+      const [comments] = state.posts.filter(item => item.id === currentPost.id);
+      console.log('=====================>', comments.numberComments)
+      comments.numberComments++;
+      
+      const postWithComment = state.posts.map(item => item.id === currentPost.id ? comments : item);
+      return {
+        ...state,
+        posts: [...postWithComment]
+      }
     default:
       return state;
   }
@@ -85,18 +101,24 @@ const categoryActions = (state = initialStateCategories, action) => {
   }
 };
 
-// const comment = (state = initialCommentsState, action) => {
-//   const currentComment = action.comments;
 
-//   switch(action.type) {
-//     case ADD_COMMENT:
-//       return [...state, currentComment];
-//     default:
-//       return state;
-//   }
-// };
+const commentActions = (state = initialStateComments, action) => {
+  const currentComment = action.comment;
+
+  switch(action.type) {
+    case GET_COMMENTS:
+      // console.log(Object.keys[currentComment.parentId].reduce)
+      return {
+        ...state, 
+        replies: [...state.replies, currentComment]
+      };
+    default:
+      return state;
+  }
+};
 
 export default combineReducers({
   postActions,
   categoryActions,
+  commentActions,
 });

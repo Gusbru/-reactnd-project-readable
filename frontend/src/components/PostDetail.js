@@ -8,9 +8,6 @@ import {
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/Menu/MenuItem';
 import Button from 'material-ui/Button';
-import Send from 'material-ui-icons/Send';
-import Cancel from 'material-ui-icons/Cancel';
-import AddIcon from 'material-ui-icons/Add';
 import IconButton from 'material-ui/IconButton';
 import AddCircle from 'material-ui-icons/AddCircle';
 import RemoveCircle from 'material-ui-icons/RemoveCircle';
