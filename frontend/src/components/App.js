@@ -33,7 +33,7 @@ class App extends Component {
   };
 
   componentWillMount() {
-    console.log("component will mount");
+    console.log("[App]component will mount");
     this.props.retrievePosts();
     this.props.retrieveCategories();
   }
@@ -95,7 +95,7 @@ class App extends Component {
               downVote={this.downVote} 
             />
         )}/>
-        {console.log(this.props.location.pathname, 'path')}
+        
         
         <If test={this.props.location.pathname !== '/create'}>
           <Route 
@@ -132,7 +132,7 @@ class App extends Component {
           )}
         />
 
-        <button onClick={() => this.fetchComment('8xf0y6ziyjabvozdd253nd')}>get comment</button>
+        
 
       </div>
     );

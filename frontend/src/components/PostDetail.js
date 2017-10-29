@@ -5,6 +5,7 @@ import {
   writePost,
   updatePost,
 } from '../actions';
+import Comment from './Comment';
 import TextField from 'material-ui/TextField';
 import MenuItem from 'material-ui/Menu/MenuItem';
 import Button from 'material-ui/Button';
@@ -26,11 +27,14 @@ class PostDetail extends Component {
     deleted    : '',
     isEditing  : false,
     snackbarOpen: false,
+    comments   : []
   };
 
   componentWillReceiveProps(nextProps) {
-    console.log('[PostDetail] componentWillReceiveProps = ', this.props.match.params.postId)
-    this.setState(this.postToEdit(this.props.match.params.postId));
+    const currentPostId = this.props.match.params.postId;
+    console.log('[PostDetail] componentWillReceiveProps = ', currentPostId)
+    
+    this.setState(this.postToEdit(currentPostId));
   }
 
   handlePostChange = name => event => {
@@ -42,6 +46,10 @@ class PostDetail extends Component {
   postToEdit = (id) => {
     const [postToEdit] = this.props.postList.filter(item => item.id === id);
     return({...postToEdit, isEditing:false});
+  }
+
+  currentPostComments = () => {
+
   }
 
   cancelPost = () => {
@@ -71,7 +79,11 @@ class PostDetail extends Component {
     this.cancelPost();
   }
 
+
   render(){
+
+    const comments = this.props.commentList.filter(item => item.parentId === this.state.id);
+    console.log(comments)
 
     return(
       <div>
@@ -179,6 +191,9 @@ class PostDetail extends Component {
             Cancel
           </Button>
         </div>
+        <div>
+          <Comment id={this.state.id}/>
+        </div>
 
       </div>
     );
@@ -188,6 +203,7 @@ class PostDetail extends Component {
 const mapStateToProps = (myActions) => (
   {
     postList: myActions.postActions.posts,
+    commentList: myActions.commentActions.replies,
   }
 );
 

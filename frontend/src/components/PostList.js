@@ -59,6 +59,8 @@ class PostList extends Component {
 
     const posts = this.props.postList.filter(_ => _.category === filterCategory || filterCategory === 'All');
     
+    
+    
     return(
       <div>
 
@@ -123,10 +125,10 @@ class PostList extends Component {
 }
 
 // connect component to redux Store
-const mapStateToProps = (postList) => (
+const mapStateToProps = (myActions) => (
   {
-    postList: postList.postActions.posts,
-    // commentList: postList.comment
+    postList: myActions.postActions.posts,
+    commentList: myActions.commentActions.replies,
   }
 )
 

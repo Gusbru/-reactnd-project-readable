@@ -35,7 +35,7 @@ const postActions = (state = initialStatePosts, action) => {
       // posts = [...state.posts, currentPost];
       return {
         ...state, 
-        posts: [...state.posts, currentPost]
+        posts: [...state.posts, currentPost],
       }
     case DELETE_POST:
       // posts = state.posts.filter((item) => item.id !== currentPost.id)
@@ -74,7 +74,7 @@ const postActions = (state = initialStatePosts, action) => {
       }
     case NUMBER_OF_COMMENTS:
       const [comments] = state.posts.filter(item => item.id === currentPost.id);
-      console.log('=====================>', comments.numberComments)
+      console.log('[reducer]=====================>', comments.numberComments)
       comments.numberComments++;
       
       const postWithComment = state.posts.map(item => item.id === currentPost.id ? comments : item);
@@ -104,10 +104,8 @@ const categoryActions = (state = initialStateCategories, action) => {
 
 const commentActions = (state = initialStateComments, action) => {
   const currentComment = action.comment;
-
   switch(action.type) {
     case GET_COMMENTS:
-      // console.log(Object.keys[currentComment.parentId].reduce)
       return {
         ...state, 
         replies: [...state.replies, currentComment]

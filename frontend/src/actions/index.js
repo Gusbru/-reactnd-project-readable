@@ -26,6 +26,13 @@ export const retrievePosts = () => async (dispatch) => {
     posts.map((item) => (
       dispatch(addPost(item))
     ));
+
+    //get the comments for each post
+    posts.map((item) => (
+      dispatch(fetchCommentForPost(item.id))
+    )
+      
+    )
   } catch(err) {
     console.error("Error retrieving posts...", err);
   }
@@ -102,24 +109,18 @@ export const fetchCommentForPost = (id) => async(dispatch) => {
     const comments = await fetchPostCommentAPI(id);
     comments.map(item => (
       dispatch(getComment(item))
-    ))
-    console.log('[actions-fetchCommentForPost]',comments);
+    ));
+
+    comments.map(item => (
+      dispatch(numberOfComments(item.parentId))
+    ));
+
   }catch(err){
     console.error('Error retrieving post comment...', err);
   }
 }
 
-export const getNumberOfComments = (id) => async(dispatch) => {
-  try{
-    const comments = await fetchPostCommentAPI(id);
-    comments.map((item) => (
-      dispatch(numberOfComments(id))
-    ))
 
-  }catch(err){
-    console.log('Error counting the number of comments...', err);
-  }
-}
 
 const addPost = ({ id, timestamp, title, body, author, category, voteScore, deleted }) => (
   {
@@ -206,7 +207,6 @@ const numberOfComments = (postId) => (
     type: NUMBER_OF_COMMENTS,
     post: {
       id: postId,
-      numberComments: 0
     }
   }
 )
