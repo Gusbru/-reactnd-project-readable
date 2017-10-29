@@ -64,6 +64,11 @@ class PostDetail extends Component {
     this.props.editPost(data);
   };
 
+  doneEditing = () => {
+    this.detailsToUpdate();
+    this.cancelPost();
+  }
+
   render(){
 
     return(
@@ -140,8 +145,13 @@ class PostDetail extends Component {
         <div>
           <Button 
             raised
+            onClick={this.doneEditing}>
+              Ok
+          </Button>
+          <Button 
+            raised
             onClick={this.toggleEditing} >
-            Edit
+              Edit
           </Button>
           <Button
             raised
