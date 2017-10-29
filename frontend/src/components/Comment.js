@@ -14,6 +14,17 @@ import Modal from 'react-modal'
 import Button from 'material-ui/Button';
 import TextField from 'material-ui/TextField';
 
+const customStyles = {
+  content : {
+    top                   : '50%',
+    left                  : '50%',
+    right                 : 'auto',
+    bottom                : 'auto',
+    marginRight           : '-50%',
+    transform             : 'translate(-50%, -50%)'
+  }
+};
+
 class Comment extends Component {
 
   state = {
@@ -133,6 +144,7 @@ class Comment extends Component {
         <Modal
           isOpen={this.state.modalIsOpen}
           onRequestClose={this.closeModal}
+          style={customStyles}
         >
           <div>
             <TextField
