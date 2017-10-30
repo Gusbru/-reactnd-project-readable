@@ -216,11 +216,14 @@ const getComment = (data) => (
   {
     type: GET_COMMENTS,
     comment: {
-      id       : data.id,
-      parentId : data.parentId,
-      timestamp: data.timestamp,
-      body     : data.body,
-      author   : data.author
+      id           : data.id,
+      parentId     : data.parentId,
+      timestamp    : data.timestamp,
+      body         : data.body,
+      author       : data.author,
+      voteScore    : data.voteScore,
+      deleted      : data.deleted,
+      parentDeleted: data.parentDeleted,
     }
   }
 );
@@ -238,11 +241,14 @@ const newComment = (data, postId) => (
   {
     type: NEW_COMMENT,
     comment: {
-      id       : data.id,
-      parentId : postId,
-      timestamp: data.timestamp,
-      body     : data.body,
-      author   : data.author,
+      id           : data.id,
+      parentId     : postId,
+      timestamp    : data.timestamp,
+      body         : data.body,
+      author       : data.author,
+      voteScore    : data.voteScore,
+      deleted      : false,
+      parentDeleted: false,
     }
   }
 );
@@ -250,7 +256,7 @@ const newComment = (data, postId) => (
 const commentVoteUp = (id) => (
   {
     type: COMMENT_VOTE_UP,
-    post: {
+    comment: {
       id,
     }
   }

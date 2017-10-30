@@ -118,8 +118,7 @@ const commentActions = (state = initialStateComments, action) => {
       }
     case COMMENT_VOTE_UP:
     const [commentUp] = state.replies.filter(item => item.id === currentComment.id);
-    console.log(commentUp)
-    if (combineReducers.hasOwnProperty('voteScore')){
+    if (commentUp.hasOwnProperty('voteScore')){
       commentUp.voteScore++;
     } else {
       commentUp.voteScore = 1

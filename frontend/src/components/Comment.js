@@ -67,8 +67,11 @@ class Comment extends Component {
     // dispatch comment to redux-store
     this.props.insertComment(currentComment, this.state.parentId);
 
+    // update local state
+    this.setState(currentComment);
+
     // back to comments
-    this.closeModal()
+    this.closeModal();
     
   }
 
@@ -105,6 +108,8 @@ class Comment extends Component {
       item.parentId === postId
     ));
 
+    
+
     return(
       <div>
         <Button 
@@ -133,7 +138,7 @@ class Comment extends Component {
                     <TableCell>{item.body}</TableCell>
                     <TableCell>{item.author}</TableCell>
                     <TableCell>{formatDate(item.timestamp)}</TableCell>
-                    <TableCell></TableCell>
+                    <TableCell>{item.voteScore}</TableCell>
                     <TableCell>
                       <IconButton onClick={(event) => this.handleVote('upVote', item.id)}>
                         <AddCircle />
