@@ -16,8 +16,11 @@ import { formatDate } from '../utils/formatDate';
 class PostList extends Component {
 
   state = {
-    sortType: ''
+    orderBy: '',
+    order: 'asc',
   }
+
+  
   
   handleDeleteButton = (event, id) => {
     console.log('delete clicked', event, id);
@@ -43,46 +46,29 @@ class PostList extends Component {
     this.props.countComments(id)
   }
 
-  sortBy = (type) => {
+  sortBy = (field) => {
+    const orderBy = field;
+    let order = 'desc';
+
+    if (this.state.orderBy === orderBy && this.state.order === 'desc') {
+      order = 'asc';
+    }
+
     this.setState({
-      sortType: type
-    })
-    console.log('sorte by', type, this.state);
+      orderBy,
+      order
+    });
+
   }
   
 
   render() {
+    console.log('render PostList')
     const filterCategory = this.props.match.params.category ? this.props.match.params.category : "All";
-
-    // if(this.state.sortType === 'score') {
-    //   const postsOrdered = this.props.postList.filter(_ => _.category === filterCategory || filterCategory === 'All').sort((a,b) => {
-    //     if(a.voteScore > b.voteScore){
-    //       return 1;
-    //     }
-    //     if(a.voteScore < b.voteScore){
-    //       return -1;
-    //     }
-    //     return 0;
-    //   });
-    // } else if(this.state.sortType === 'date') {
-    //   const postsOrdered = this.props.postList.filter(_ => _.category === filterCategory || filterCategory === 'All').sort((a,b) => {
-    //     if(a.timestamp > b.timestamp){
-    //       return 1;
-    //     }
-    //     if(a.timestamp < b.timestamp){
-    //       return -1;
-    //     }
-    //     return 0;
-    //   });
-    // } else {
-    //   const postsOrdered = this.props.postList.filter(_ => _.category === filterCategory || filterCategory === 'All')
-    // }
-    
-    
-    
-    const posts = this.props.postList.filter(_ => _.category === filterCategory || filterCategory === 'All');
-    
-    
+    const posts = 
+    this.state.order === 'desc'
+    ? this.props.postList.filter(_ => _.category === filterCategory || filterCategory === 'All').sort((a, b) => (b[this.state.orderBy] < a[this.state.orderBy] ? 1 : -1))
+    : this.props.postList.filter(_ => _.category === filterCategory || filterCategory === 'All').sort((a, b) => (a[this.state.orderBy] < b[this.state.orderBy] ? 1 : -1));
     
     return(
       <div>
@@ -103,8 +89,8 @@ class PostList extends Component {
                 <TableCell>Author</TableCell>
                 <TableCell># of Comments</TableCell>
                 <TableCell>Category</TableCell>
-                <TableCell onClick={() => this.sortBy('date')}>Date</TableCell>
-                <TableCell onClick={() => this.sortBy('score')}>Score</TableCell>
+                <TableCell onClick={() => this.sortBy('timestamp')}>Date</TableCell>
+                <TableCell onClick={() => this.sortBy('voteScore')}>Score</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
