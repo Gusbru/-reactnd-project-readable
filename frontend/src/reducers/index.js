@@ -76,9 +76,7 @@ const postActions = (state = initialStatePosts, action) => {
       }
     case NUMBER_OF_COMMENTS:
       const [comments] = state.posts.filter(item => item.id === currentPost.id);
-      console.log('[reducer]=====================>', comments.numberComments)
       comments.numberComments++;
-      
       const postWithComment = state.posts.map(item => item.id === currentPost.id ? comments : item);
       return {
         ...state,

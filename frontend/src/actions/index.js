@@ -255,7 +255,6 @@ const newComment = (data, postId) => (
 );
 
 const voteComment = (id, voteType) => {
-  console.log(voteType)
   switch(voteType){
     case 'upVote':
       return(
