@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import SimpleAppBar from './AppBar';
-import { Route, withRouter } from 'react-router-dom';
+import { Route, withRouter, Switch } from 'react-router-dom';
 import PostList from './PostList';
 import PostDetail from './PostDetail';
 import NewPost from './NewPost'
-import If from './If';
 import { connect } from 'react-redux';
 import { 
   writePost, 
@@ -85,22 +84,42 @@ class App extends Component {
 
         <SimpleAppBar title="My Posts" categories={this.categories()}/>
         
-        <Route
-          exact
-          path='/'
-          render={() => (
-            <PostList
-              deletePost={this.removePost} 
-              upVote={this.upVote}
-              downVote={this.downVote} 
-            />
-        )}/>
-        
-        
-        <If test={this.props.location.pathname !== '/create'}>
+        <Switch>
+          <Route
+            exact
+            path='/'
+            render={() => (
+              <PostList
+                deletePost={this.removePost} 
+                upVote={this.upVote}
+                downVote={this.downVote} 
+              />
+          )}/>
+          
+          <Route
+            path='/create'
+            exact
+            render={() => (
+              <NewPost />
+            )}
+          />
+
+          <Route 
+            path='/:category/:postId'
+            exact
+            render={({ match }) => (
+              <PostDetail 
+                match={match}
+                upVote={this.upVote}
+                downVote={this.downVote}
+              />
+            )}
+          />
+
+          
           <Route 
             path='/:category'
-            exact
+            exacr
             render={({ match }) => (
               <PostList
                 match={match}
@@ -110,27 +129,14 @@ class App extends Component {
               />
             )}
           />
-        </If>
+          
 
-        <Route 
-          path='/:category/:postId'
-          exact
-          render={({ match }) => (
-            <PostDetail 
-              match={match}
-              upVote={this.upVote}
-              downVote={this.downVote}
-            />
-          )}
-        />
+          
 
-        <Route
-          path='/create'
-          exact
-          render={() => (
-            <NewPost />
-          )}
-        />
+          
+
+          <Route component={NoMatch}/>
+        </Switch>
 
         
 
@@ -138,6 +144,13 @@ class App extends Component {
     );
   }
 }
+
+const NoMatch = ({ location }) => (
+  <div>
+    <h3>No match for <code>{location.pathname}</code></h3>
+  </div>
+)
+
 
 // connect component to redux Store
 const mapStateToProps = (myActions) => (
