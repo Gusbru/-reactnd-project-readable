@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import If from './If';
 import { 
   createNewComment,
-  upComment,
+  commentVote,
 } from '../actions';
 import uuidv1 from 'uuid/v1';
 import Paper from 'material-ui/Paper';
@@ -90,10 +90,10 @@ class Comment extends Component {
   handleVote = (event, id) => {
     switch(event) {
       case "upVote":
-        this.props.upVoteComment(id);
+        this.props.voteComment(id, event);
         break;
       case "downVote":
-        //this.props.downVote(id);
+        this.props.voteComment(id, event);
         break;
       default:
         break;
@@ -143,7 +143,7 @@ class Comment extends Component {
                       <IconButton onClick={(event) => this.handleVote('upVote', item.id)}>
                         <AddCircle />
                       </IconButton>
-                      <IconButton >
+                      <IconButton onClick={(event) => this.handleVote('downVote', item.id)}>
                         <RemoveCircle />
                       </IconButton>
                       <IconButton>
@@ -216,7 +216,7 @@ const mapStateToProps = (myActions) => (
 const mapDispatchToProps = (dispatch) => (
   {
     insertComment: (data, postId) => dispatch(createNewComment(data, postId)),
-    upVoteComment: (commentId) => dispatch(upComment(commentId)),
+    voteComment: (commentId, voteType) => dispatch(commentVote(commentId, voteType)),
   }
 );
 

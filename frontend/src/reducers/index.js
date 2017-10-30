@@ -10,6 +10,7 @@ import {
   NUMBER_OF_COMMENTS,
   NEW_COMMENT,
   COMMENT_VOTE_UP,
+  COMMENT_VOTE_DOWN,
 } from '../actions';
 
 const initialStatePosts = {
@@ -117,19 +118,33 @@ const commentActions = (state = initialStateComments, action) => {
         replies: [...state.replies, currentComment]
       }
     case COMMENT_VOTE_UP:
-    const [commentUp] = state.replies.filter(item => item.id === currentComment.id);
-    if (commentUp.hasOwnProperty('voteScore')){
-      commentUp.voteScore++;
-    } else {
-      commentUp.voteScore = 1
-    }
-    const commentNewUp = state.replies.map(item => (
-      item.id === currentComment.id ? commentUp : item
-    ))
-    return {
-      ...state,
-      replies: [...commentNewUp]
-    };
+      const [commentUp] = state.replies.filter(item => item.id === currentComment.id);
+      if (commentUp.hasOwnProperty('voteScore')){
+        commentUp.voteScore++;
+      } else {
+        commentUp.voteScore = 1
+      }
+      const commentNewUp = state.replies.map(item => (
+        item.id === currentComment.id ? commentUp : item
+      ))
+      return {
+        ...state,
+        replies: [...commentNewUp]
+      };
+    case COMMENT_VOTE_DOWN:
+      const [commentDown] = state.replies.filter(item => item.id === currentComment.id);
+      if (commentDown.hasOwnProperty('voteScore')){
+        commentDown.voteScore--;
+      } else {
+        commentUp.voteScore = -1
+      }
+      const commentNewDown = state.replies.map(item => (
+        item.id === currentComment.id ? commentDown : item
+      ))
+      return {
+        ...state,
+        replies: [...commentNewDown]
+      };
     default:
       return state;
   }

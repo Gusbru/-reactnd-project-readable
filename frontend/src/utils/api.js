@@ -183,7 +183,7 @@ export const addPostCommentAPI = async (data, postId) => (
   .catch(err => console.error('Error writing new post to server ->', err))
 )
 
-export const commentVoteUpAPI = async (id) => (
+export const commentVoteAPI = async (id, upORdown) => (
   await fetch(
     url + `/comments/${id}`,
     {
@@ -193,10 +193,10 @@ export const commentVoteUpAPI = async (id) => (
         'Content-Type' : 'application/json'
       },
       body: JSON.stringify({
-        option: "upVote"
+        option: upORdown
       })
     }
   )
   .then((res) => res.json())
-  .catch(err => console.error('Error computing upVote for a comment to server ->', err))
+  .catch(err => console.error('Error computing vote for a comment to server ->', err))
 );

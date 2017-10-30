@@ -8,7 +8,7 @@ import {
   editPostAPI,
   fetchPostCommentAPI,
   addPostCommentAPI,
-  commentVoteUpAPI,
+  commentVoteAPI,
 } from '../utils/api';
 
 export const ADD_POST           = 'ADD_POST';
@@ -21,6 +21,7 @@ export const GET_COMMENTS       = 'GET_COMMENTS';
 export const NUMBER_OF_COMMENTS = 'NUMBER_OF_COMMENTS';
 export const NEW_COMMENT        = 'NEW_COMMENT';
 export const COMMENT_VOTE_UP    = 'COMMENT_VOTE_UP';
+export const COMMENT_VOTE_DOWN  = 'COMMENT_VOTE_DOWN';
 
 // Get all posts from the server
 export const retrievePosts = () => async (dispatch) => {
@@ -135,10 +136,10 @@ export const createNewComment = (data, postId) => async(dispatch) => {
 };
 
 //Vote up to a comment
-export const upComment = (id) => async(dispatch) => {
+export const commentVote = (id, voteType) => async(dispatch) => {
   try {
-    await commentVoteUpAPI(id);
-    dispatch(commentVoteUp(id));
+    await commentVoteAPI(id, voteType);
+    dispatch(voteComment(id, voteType));
   } catch(err) {
     console.log('Error voting up to a comment...', err);
   };
@@ -253,11 +254,28 @@ const newComment = (data, postId) => (
   }
 );
 
-const commentVoteUp = (id) => (
-  {
-    type: COMMENT_VOTE_UP,
-    comment: {
-      id,
-    }
-  }
-);
+const voteComment = (id, voteType) => {
+  console.log(voteType)
+  switch(voteType){
+    case 'upVote':
+      return(
+        {
+          type: COMMENT_VOTE_UP,
+          comment: {
+            id,
+          }
+        }
+      );
+    case 'downVote':
+      return(
+        {
+          type: COMMENT_VOTE_DOWN,
+          comment: {
+            id,
+          }
+        }
+      );
+    default:
+      console.error('Error voting comment');
+  };
+};
