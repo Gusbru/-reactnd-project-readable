@@ -14,6 +14,10 @@ import { formatDate } from '../utils/formatDate';
 
 
 class PostList extends Component {
+
+  state = {
+    sortType: ''
+  }
   
   handleDeleteButton = (event, id) => {
     console.log('delete clicked', event, id);
@@ -38,13 +42,44 @@ class PostList extends Component {
   fetchCommentNumber = (id) => {
     this.props.countComments(id)
   }
+
+  sortBy = (type) => {
+    this.setState({
+      sortType: type
+    })
+    console.log('sorte by', type, this.state);
+  }
   
 
   render() {
     const filterCategory = this.props.match.params.category ? this.props.match.params.category : "All";
 
-    console.log("filterCategory = ", filterCategory);
-
+    // if(this.state.sortType === 'score') {
+    //   const postsOrdered = this.props.postList.filter(_ => _.category === filterCategory || filterCategory === 'All').sort((a,b) => {
+    //     if(a.voteScore > b.voteScore){
+    //       return 1;
+    //     }
+    //     if(a.voteScore < b.voteScore){
+    //       return -1;
+    //     }
+    //     return 0;
+    //   });
+    // } else if(this.state.sortType === 'date') {
+    //   const postsOrdered = this.props.postList.filter(_ => _.category === filterCategory || filterCategory === 'All').sort((a,b) => {
+    //     if(a.timestamp > b.timestamp){
+    //       return 1;
+    //     }
+    //     if(a.timestamp < b.timestamp){
+    //       return -1;
+    //     }
+    //     return 0;
+    //   });
+    // } else {
+    //   const postsOrdered = this.props.postList.filter(_ => _.category === filterCategory || filterCategory === 'All')
+    // }
+    
+    
+    
     const posts = this.props.postList.filter(_ => _.category === filterCategory || filterCategory === 'All');
     
     
@@ -68,9 +103,8 @@ class PostList extends Component {
                 <TableCell>Author</TableCell>
                 <TableCell># of Comments</TableCell>
                 <TableCell>Category</TableCell>
-                
-                <TableCell>Date</TableCell>
-                <TableCell>Score</TableCell>
+                <TableCell onClick={() => this.sortBy('date')}>Date</TableCell>
+                <TableCell onClick={() => this.sortBy('score')}>Score</TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
