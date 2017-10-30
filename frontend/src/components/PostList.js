@@ -9,6 +9,10 @@ import IconButton from 'material-ui/IconButton';
 import AddCircle from 'material-ui-icons/AddCircle';
 import RemoveCircle from 'material-ui-icons/RemoveCircle';
 import DeleteForever from 'material-ui-icons/DeleteForever';
+import ArrowDropUp from 'material-ui-icons/ArrowDropUp';
+import ArrowDropDown from 'material-ui-icons/ArrowDropDown';
+import DateRange from 'material-ui-icons/DateRange';
+import TrendingUp from 'material-ui-icons/TrendingUp';
 import Info from 'material-ui-icons/Info';
 import { formatDate } from '../utils/formatDate';
 
@@ -60,6 +64,12 @@ class PostList extends Component {
     });
 
   }
+
+  cancelSort = () => {
+    this.setState({
+      orderBy: ''
+    })
+  }
   
 
   render() {
@@ -79,7 +89,16 @@ class PostList extends Component {
           </Button>
         </div> 
 
-        <p>We have {posts.length ? posts.length : 0} posts in the category: {filterCategory}</p>
+        <div>
+          <p>
+            We have {posts.length ? posts.length : 0} posts in the category: {filterCategory}
+          </p>
+          {this.state.orderBy !== ''
+            ? <Button onClick={this.cancelSort}>Cancel Sort</Button>
+            : ""
+          }
+          
+        </div>
 
         <Paper>
           <Table>
@@ -89,8 +108,19 @@ class PostList extends Component {
                 <TableCell>Author</TableCell>
                 <TableCell># of Comments</TableCell>
                 <TableCell>Category</TableCell>
-                <TableCell onClick={() => this.sortBy('timestamp')}>Date</TableCell>
-                <TableCell onClick={() => this.sortBy('voteScore')}>Score</TableCell>
+                <TableCell onClick={() => this.sortBy('timestamp')}>
+                  {this.state.orderBy === 'timestamp' && this.state.orderBy !== ""
+                    ? this.state.order === 'asc' ? <ArrowDropUp /> : <ArrowDropDown/>
+                    : ""
+                  }
+                  <DateRange/>
+                </TableCell>
+                <TableCell onClick={() => this.sortBy('voteScore')}>
+                  {this.state.orderBy === 'voteScore' && this.state.orderBy !== ""
+                    ? this.state.order === 'asc' ? <ArrowDropUp /> : <ArrowDropDown/>
+                    : "" }
+                  <TrendingUp/>
+                </TableCell>
                 <TableCell>Actions</TableCell>
               </TableRow>
             </TableHead>
