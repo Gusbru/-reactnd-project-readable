@@ -4,6 +4,7 @@ import If from './If';
 import { 
   createNewComment,
   commentVote,
+  removeComment,
 } from '../actions';
 import uuidv1 from 'uuid/v1';
 import Paper from 'material-ui/Paper';
@@ -100,6 +101,10 @@ class Comment extends Component {
     }
   }
 
+  removeComment = (id) => {
+    this.props.deleteComment(id);
+  }
+
 
   render(){
 
@@ -146,7 +151,7 @@ class Comment extends Component {
                       <IconButton onClick={(event) => this.handleVote('downVote', item.id)}>
                         <RemoveCircle />
                       </IconButton>
-                      <IconButton>
+                      <IconButton onClick={() => this.removeComment(item.id)}>
                         <DeleteForever />
                       </IconButton>
                     </TableCell>
@@ -217,6 +222,7 @@ const mapDispatchToProps = (dispatch) => (
   {
     insertComment: (data, postId) => dispatch(createNewComment(data, postId)),
     voteComment: (commentId, voteType) => dispatch(commentVote(commentId, voteType)),
+    deleteComment: (id) => dispatch(removeComment(id)),
   }
 );
 

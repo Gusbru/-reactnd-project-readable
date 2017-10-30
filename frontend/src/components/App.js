@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SimpleAppBar from './AppBar';
-import { Route, withRouter, Switch } from 'react-router-dom';
+import { Route, withRouter, Switch, BrowserRouter } from 'react-router-dom';
 import PostList from './PostList';
 import PostDetail from './PostDetail';
 import NewPost from './NewPost'
@@ -35,7 +35,7 @@ class App extends Component {
     console.log("[App]component will mount");
     this.props.retrievePosts();
     this.props.retrieveCategories();
-  }
+  };
   
 
   removePost = (id) => {
@@ -44,24 +44,22 @@ class App extends Component {
     if (!id) {
       return;
     }
-
     this.props.removePost(id);
-    
-  }
+  };
 
   handlePostClick = (id, category) => {
     console.log(id, category);
-  }
+  };
 
   upVote = (id) => {
     console.log('botao voto up', id);
     this.props.voteUpPost(id);
-  }
+  };
 
   downVote = (id) => {
     console.log('botao voto down', id)
     this.props.voteDownPost(id);
-  }
+  };
   
 
   // get categories from server
@@ -69,10 +67,10 @@ class App extends Component {
     this.props.categoryList.map(item => (
       item.name
     ))
-  )
+  );
 
   fetchComment = (id) => {
-    this.props.retrieveComments(id)
+    this.props.retrieveComments(id);
   }
   
   render() {
@@ -80,67 +78,60 @@ class App extends Component {
 
 
     return (
-      <div className="App">
-
-        <SimpleAppBar title="My Posts" categories={this.categories()}/>
-        
-        <Switch>
-          <Route
-            exact
-            path='/'
-            render={() => (
-              <PostList
-                deletePost={this.removePost} 
-                upVote={this.upVote}
-                downVote={this.downVote} 
-              />
-          )}/>
+      <BrowserRouter>
+        <div className="App">
+          <SimpleAppBar title="My Posts" categories={this.categories()}/>
           
-          <Route
-            path='/create'
-            exact
-            render={() => (
-              <NewPost />
-            )}
-          />
+          <Switch>
+            <Route
+              exact
+              path='/'
+              render={() => (
+                <PostList
+                  deletePost={this.removePost} 
+                  upVote={this.upVote}
+                  downVote={this.downVote} 
+                />
+            )}/>
+            
+            <Route
+              path='/create'
+              exact
+              render={() => (
+                <NewPost />
+              )}
+            />
 
-          <Route 
-            path='/:category/:postId'
-            exact
-            render={({ match }) => (
-              <PostDetail 
-                match={match}
-                upVote={this.upVote}
-                downVote={this.downVote}
-              />
-            )}
-          />
+            <Route 
+              path='/:category/:postId'
+              exact
+              render={({ match }) => (
+                <PostDetail 
+                  match={match}
+                  upVote={this.upVote}
+                  downVote={this.downVote}
+                />
+              )}
+            />
 
-          
-          <Route 
-            path='/:category'
-            exacr
-            render={({ match }) => (
-              <PostList
-                match={match}
-                deletePost={this.removePost} 
-                upVote={this.upVote}
-                downVote={this.downVote}
-              />
-            )}
-          />
-          
+            
+            <Route 
+              path='/:category'
+              exacr
+              render={({ match }) => (
+                <PostList
+                  match={match}
+                  deletePost={this.removePost} 
+                  upVote={this.upVote}
+                  downVote={this.downVote}
+                />
+              )}
+            />
 
-          
-
-          
-
-          <Route component={NoMatch}/>
-        </Switch>
-
-        
-
-      </div>
+            <Route component={NoMatch}/>
+          </Switch>
+        </div>
+      </BrowserRouter>
     );
   }
 }

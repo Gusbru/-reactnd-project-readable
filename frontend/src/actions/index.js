@@ -9,6 +9,7 @@ import {
   fetchPostCommentAPI,
   addPostCommentAPI,
   commentVoteAPI,
+  rmCommentAPI,
 } from '../utils/api';
 
 export const ADD_POST           = 'ADD_POST';
@@ -22,6 +23,7 @@ export const NUMBER_OF_COMMENTS = 'NUMBER_OF_COMMENTS';
 export const NEW_COMMENT        = 'NEW_COMMENT';
 export const COMMENT_VOTE_UP    = 'COMMENT_VOTE_UP';
 export const COMMENT_VOTE_DOWN  = 'COMMENT_VOTE_DOWN';
+export const DELETE_COMMENT     = 'DELETE_COMMENT';
 
 // Get all posts from the server
 export const retrievePosts = () => async (dispatch) => {
@@ -135,7 +137,7 @@ export const createNewComment = (data, postId) => async(dispatch) => {
   };
 };
 
-//Vote up to a comment
+//Vote to a comment
 export const commentVote = (id, voteType) => async(dispatch) => {
   try {
     await commentVoteAPI(id, voteType);
@@ -144,6 +146,16 @@ export const commentVote = (id, voteType) => async(dispatch) => {
     console.log('Error voting up to a comment...', err);
   };
 };
+
+//Delete a comment
+export const removeComment = (id) => async(dispatch) => {
+  try {
+    await rmCommentAPI(id);
+    dispatch(deleteComment(id));
+  } catch(err) {
+    console.log('Error deleting a comment...', err);
+  }
+}
 
 
 const addPost = ({ id, timestamp, title, body, author, category, voteScore, deleted }) => (
@@ -278,3 +290,13 @@ const voteComment = (id, voteType) => {
       console.error('Error voting comment');
   };
 };
+
+const deleteComment = (id) => (
+  {
+    type: DELETE_COMMENT,
+    comment: {
+      id,
+      deleted: true
+    }
+  }
+);

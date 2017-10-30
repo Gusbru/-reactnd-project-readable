@@ -11,6 +11,7 @@ import {
   NEW_COMMENT,
   COMMENT_VOTE_UP,
   COMMENT_VOTE_DOWN,
+  DELETE_COMMENT,
 } from '../actions';
 
 const initialStatePosts = {
@@ -143,6 +144,12 @@ const commentActions = (state = initialStateComments, action) => {
         ...state,
         replies: [...commentNewDown]
       };
+    case DELETE_COMMENT:
+      const newComments = state.replies.filter(item => item.id !== currentComment.id);
+      return {
+        ...state,
+        replies: [...newComments]
+      }
     default:
       return state;
   }

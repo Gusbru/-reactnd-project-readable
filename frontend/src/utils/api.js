@@ -197,6 +197,21 @@ export const commentVoteAPI = async (id, upORdown) => (
       })
     }
   )
-  .then((res) => res.json())
+  .then(res => res.json())
   .catch(err => console.error('Error computing vote for a comment to server ->', err))
 );
+
+export const rmCommentAPI = async (id) => (
+  await fetch(
+    url + `/comments/${id}`,
+    {
+      method: 'DELETE',
+      headers: { 
+        'Authorization': 'whatever-you-want',
+        'Content-Type' : 'application/json'
+      },
+    }
+  )
+  .then(res => res.json())
+  .catch(err => console.error('Error deleting a comment', err))
+)
