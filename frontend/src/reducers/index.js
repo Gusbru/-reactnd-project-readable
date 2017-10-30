@@ -12,6 +12,7 @@ import {
   COMMENT_VOTE_UP,
   COMMENT_VOTE_DOWN,
   DELETE_COMMENT,
+  EDIT_COMMENT,
 } from '../actions';
 
 const initialStatePosts = {
@@ -149,6 +150,14 @@ const commentActions = (state = initialStateComments, action) => {
       return {
         ...state,
         replies: [...newComments]
+      }
+    case EDIT_COMMENT:
+      const [commentToEdit] = state.replies.filter(item => item.id === currentComment.id);
+      commentToEdit.body = currentComment.body;
+      const editComments = state.replies.map(item => item.id === currentComment.id ? commentToEdit : item)
+      return {
+        ...state,
+        replies: [...editComments]
       }
     default:
       return state;

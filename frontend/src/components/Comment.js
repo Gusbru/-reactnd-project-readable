@@ -5,6 +5,7 @@ import {
   createNewComment,
   commentVote,
   removeComment,
+  updateComment,
 } from '../actions';
 import uuidv1 from 'uuid/v1';
 import Paper from 'material-ui/Paper';
@@ -13,6 +14,7 @@ import IconButton from 'material-ui/IconButton';
 import AddCircle from 'material-ui-icons/AddCircle';
 import RemoveCircle from 'material-ui-icons/RemoveCircle';
 import DeleteForever from 'material-ui-icons/DeleteForever';
+import Edit from 'material-ui-icons/Edit';
 import { formatDate } from '../utils/formatDate';
 import Modal from 'react-modal';
 import Button from 'material-ui/Button';
@@ -32,13 +34,14 @@ const customStyles = {
 class Comment extends Component {
 
   state = {
-    id       : '',
-    parentId : '',
-    author   : '',
-    body     : '',
-    timestamp: '',
-    voteScore: 0,
+    id         : '',
+    parentId   : '',
+    author     : '',
+    body       : '',
+    timestamp  : '',
+    voteScore  : 1,
     modalIsOpen: false,
+    isEditing  : false,
   }
 
   componentWillReceiveProps(nextProps) {
@@ -62,30 +65,41 @@ class Comment extends Component {
       author   : this.state.author,
       body     : this.state.body,
       timestamp: Date.now(),
-      voteScore: 0,
+      voteScore: 1,
+      isEditing: false,
     }
-
-    // dispatch comment to redux-store
-    this.props.insertComment(currentComment, this.state.parentId);
 
     // update local state
     this.setState(currentComment);
 
+
+    // dispatch comment to redux-store
+    this.props.insertComment(currentComment, this.state.parentId);
+
+    
     // back to comments
     this.closeModal();
     
   }
 
   openModal = () => {
-    // console.log('openModal')
-    //this.setState({modalIsOpen: true});
     this.setState(
       {modalIsOpen: true}
     )
   }
 
   closeModal = () => {
-    this.setState({modalIsOpen: false});
+    console.log('closing modal')
+    this.setState({
+      id         : '',
+      parentId   : '',
+      author     : '',
+      body       : '',
+      timestamp  : '',
+      voteScore  : 1,
+      modalIsOpen: false,
+      isEditing  : false,
+    });
   }
 
   handleVote = (event, id) => {
@@ -103,6 +117,17 @@ class Comment extends Component {
 
   removeComment = (id) => {
     this.props.deleteComment(id);
+  };
+
+  editComment = (id) => {
+    const [currentCommet] = this.props.commentList.filter(item => item.id === id);
+    this.setState({...currentCommet, isEditing:true});
+    this.openModal();
+  };
+
+  updateComment = () => {
+    this.props.editComment(this.state);
+    this.closeModal();
   }
 
 
@@ -151,6 +176,9 @@ class Comment extends Component {
                       <IconButton onClick={(event) => this.handleVote('downVote', item.id)}>
                         <RemoveCircle />
                       </IconButton>
+                      <IconButton onClick={() => this.editComment(item.id)}>
+                        <Edit />
+                      </IconButton>
                       <IconButton onClick={() => this.removeComment(item.id)}>
                         <DeleteForever />
                       </IconButton>
@@ -191,15 +219,24 @@ class Comment extends Component {
               id='author'
               name='author'
               label='Author Name'
+              disabled={this.state.isEditing}
               value={this.state.author}
               onChange={this.handlePostChange('author')}
               margin="normal"
             />
           </div>
           <div>
-            <Button onClick={this.includeNewComment}>
-              Add Comment
-            </Button>
+            {this.state.isEditing
+              ? 
+                <Button onClick={this.updateComment}>
+                  Update Comment
+                </Button>
+              :
+                <Button onClick={this.includeNewComment}>
+                  Add Comment
+                </Button>
+              }
+            
             <Button onClick={this.closeModal}>
               Close
             </Button>
@@ -223,6 +260,7 @@ const mapDispatchToProps = (dispatch) => (
     insertComment: (data, postId) => dispatch(createNewComment(data, postId)),
     voteComment: (commentId, voteType) => dispatch(commentVote(commentId, voteType)),
     deleteComment: (id) => dispatch(removeComment(id)),
+    editComment: (data) => dispatch(updateComment(data)),
   }
 );
 

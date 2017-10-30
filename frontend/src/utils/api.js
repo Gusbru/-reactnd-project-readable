@@ -215,3 +215,22 @@ export const rmCommentAPI = async (id) => (
   .then(res => res.json())
   .catch(err => console.error('Error deleting a comment', err))
 )
+
+export const editCommentAPI = async (data) => (
+  await fetch(
+    url + `/comments/${data.id}`,
+    {
+      method: 'PUT',
+      headers: { 
+        'Authorization': 'whatever-you-want',
+        'Content-Type' : 'application/json'
+      },
+      body: JSON.stringify({
+        body: data.body,
+        timestamp: data.timestamp
+      })
+    }
+  )
+  .then(res => res.json())
+  .catch(err => console.error('Error updating comment', err))
+)

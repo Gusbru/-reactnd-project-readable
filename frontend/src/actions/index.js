@@ -10,6 +10,7 @@ import {
   addPostCommentAPI,
   commentVoteAPI,
   rmCommentAPI,
+  editCommentAPI,
 } from '../utils/api';
 
 export const ADD_POST           = 'ADD_POST';
@@ -24,6 +25,7 @@ export const NEW_COMMENT        = 'NEW_COMMENT';
 export const COMMENT_VOTE_UP    = 'COMMENT_VOTE_UP';
 export const COMMENT_VOTE_DOWN  = 'COMMENT_VOTE_DOWN';
 export const DELETE_COMMENT     = 'DELETE_COMMENT';
+export const EDIT_COMMENT       = 'EDIT_COMMENT';
 
 // Get all posts from the server
 export const retrievePosts = () => async (dispatch) => {
@@ -156,6 +158,16 @@ export const removeComment = (id) => async(dispatch) => {
     console.log('Error deleting a comment...', err);
   }
 }
+
+// update an existing comment
+export const updateComment = (data) => async(dispatch) => {
+  try {
+    await editCommentAPI(data);
+    dispatch(editComment(data));
+  } catch(err) {
+    console.log('Error updating comment...', err);
+  };
+};
 
 
 const addPost = ({ id, timestamp, title, body, author, category, voteScore, deleted }) => (
@@ -297,6 +309,16 @@ const deleteComment = (id) => (
     comment: {
       id,
       deleted: true
+    }
+  }
+);
+
+const editComment = (data) => (
+  {
+    type: EDIT_COMMENT,
+    comment: {
+      id   : data.id,
+      body : data.body,
     }
   }
 );
