@@ -3,7 +3,7 @@ import SimpleAppBar from './AppBar';
 import { Route, withRouter, Switch, BrowserRouter } from 'react-router-dom';
 import PostList from './PostList';
 import PostDetail from './PostDetail';
-import NewPost from './NewPost'
+import NewPost from './NewPost';
 import { connect } from 'react-redux';
 import { 
   writePost, 
@@ -69,13 +69,12 @@ class App extends Component {
     ))
   );
 
-  fetchComment = (id) => {
-    this.props.retrieveComments(id);
-  }
+  // fetchComment = (id) => {
+  //   this.props.retrieveComments(id);
+  // }
   
   render() {
     //console.log('Props', this.props);
-
 
     return (
       <BrowserRouter>
@@ -83,6 +82,15 @@ class App extends Component {
           <SimpleAppBar title="My Posts" categories={this.categories()}/>
           
           <Switch>
+            
+            <Route
+              path='/create'
+              exact
+              render={() => (
+                <NewPost />
+              )}
+            />
+
             <Route
               exact
               path='/'
@@ -94,41 +102,40 @@ class App extends Component {
                 />
             )}/>
             
-            <Route
-              path='/create'
-              exact
-              render={() => (
-                <NewPost />
-              )}
-            />
-
-            <Route 
-              path='/:category/:postId'
-              exact
-              render={({ match }) => (
-                <PostDetail 
-                  match={match}
-                  upVote={this.upVote}
-                  downVote={this.downVote}
-                />
-              )}
-            />
-
             
-            <Route 
-              path='/:category'
-              exacr
-              render={({ match }) => (
-                <PostList
-                  match={match}
-                  deletePost={this.removePost} 
-                  upVote={this.upVote}
-                  downVote={this.downVote}
+            
+            {
+              ['/', ...this.props.categoryList.map(item => '/'+item.path)].includes(this.props.location.pathname)
+              ? <Route 
+                  path='/:category'
+                  exact
+                  render={({ match }) => (
+                    <PostList
+                      match={match}
+                      deletePost={this.removePost} 
+                      upVote={this.upVote}
+                      downVote={this.downVote}
+                    />
+                  )}
                 />
-              )}
-            />
 
-            <Route component={NoMatch}/>
+              : this.props.postList.map(item => '/'+item.category+'/'+item.id).includes(this.props.location.pathname)
+                  ? <Route 
+                      path='/:category/:postId'
+                      exact
+                      render={({ match }) => (
+                        <PostDetail 
+                          match={match}
+                          categoryList={this.props.categoryList}
+                          upVote={this.upVote}
+                          downVote={this.downVote}
+                        />
+                      )}
+                    />  
+                  : <Route component={NoMatch}/>
+            }
+
+
           </Switch>
         </div>
       </BrowserRouter>

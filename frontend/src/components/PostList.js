@@ -24,6 +24,9 @@ class PostList extends Component {
     order: 'asc',
   }
 
+  componentWillReceiveProps() {
+
+  }
   
   
   handleDeleteButton = (event, id) => {
@@ -166,6 +169,7 @@ class PostList extends Component {
 const mapStateToProps = (myActions) => (
   {
     postList: myActions.postActions.posts,
+    categoryList: myActions.categoryActions.categories,
     commentList: myActions.commentActions.replies,
   }
 )
