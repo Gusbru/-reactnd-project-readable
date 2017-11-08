@@ -29,7 +29,6 @@ export const EDIT_COMMENT       = 'EDIT_COMMENT';
 
 // Get all posts from the server
 export const retrievePosts = () => async (dispatch) => {
-  console.log('[actions]Trying to retrieve the posts...');
   try {
     const posts = await fetchPosts();
     posts.map((item) => (
@@ -47,7 +46,6 @@ export const retrievePosts = () => async (dispatch) => {
 
 // Write post to server
 export const writePost = (data) => async(dispatch) => {
-  console.log('[action]Adding a post...');
   try {
     await writePostAPI(data);
     dispatch(addPost(data));
@@ -58,7 +56,6 @@ export const writePost = (data) => async(dispatch) => {
 
 //Removing post from the server
 export const rmPost = (id) => async(dispatch) => {
-  console.log('[action]Removing a post...');
   try {
     const postRemoved = await deletePostAPI(id);
     dispatch(deletePost(postRemoved.id));
@@ -99,7 +96,6 @@ export const updatePost = (data) => async(dispatch) => {
 
 // Get all categories from the server
 export const retrieveCategories = () => async (dispatch) => {
-  console.log('[actions]Trying to retrieve the categories...');
   try {
     const {categories} = await fetchCategories();
     categories.map((item) => (
@@ -112,7 +108,6 @@ export const retrieveCategories = () => async (dispatch) => {
 
 // get the comments for a single post
 export const fetchCommentForPost = (id) => async(dispatch) => {
-  console.log('[actions]Trying to get the comments');
   try {
     const comments = await fetchPostCommentAPI(id);
     comments.map(item => (
@@ -129,7 +124,6 @@ export const fetchCommentForPost = (id) => async(dispatch) => {
 
 // Create a new comment
 export const createNewComment = (data, postId) => async(dispatch) => {
-  console.log('[actions]Trying to publish a new comment');
   try {
     await addPostCommentAPI(data, postId);
     dispatch(newComment(data, postId));
