@@ -75,7 +75,6 @@ class PostList extends Component {
   
 
   render() {
-    console.log('render PostList')
     const filterCategory = this.props.match.params.category ? this.props.match.params.category : "All";
     const posts = 
     this.state.order === 'desc'

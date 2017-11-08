@@ -39,7 +39,6 @@ class NewPost extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    console.log('[NewPost] componentWillReceiveProps = ', nextProps.postToEdit)
     this.setState(nextProps.postToEdit);
   }
 

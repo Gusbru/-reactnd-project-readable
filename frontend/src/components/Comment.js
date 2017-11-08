@@ -89,7 +89,6 @@ class Comment extends Component {
   }
 
   closeModal = () => {
-    console.log('closing modal')
     this.setState({
       id         : '',
       parentId   : '',

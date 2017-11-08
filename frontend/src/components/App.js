@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import SimpleAppBar from './AppBar';
-import { Route, withRouter, Switch, BrowserRouter } from 'react-router-dom';
+import { Route, withRouter, Switch } from 'react-router-dom';
 import PostList from './PostList';
 import PostDetail from './PostDetail';
 import NewPost from './NewPost';
@@ -130,6 +130,7 @@ class App extends Component {
 const NoMatch = ({ location }) => (
   <div>
     <h3>No match for <code>{location.pathname}</code></h3>
+    <div><a href="/">Return to main page</a></div>
   </div>
 )
 

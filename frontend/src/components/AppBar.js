@@ -29,7 +29,6 @@ class SimpleAppBar extends Component {
       open: true,
       anchorEl: event.currentTarget,
     });
-    // console.log(event.currentTarget)
   };
   
   handleRequestClose = () => {
