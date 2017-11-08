@@ -30,7 +30,6 @@ class PostList extends Component {
   
   
   handleDeleteButton = (event, id) => {
-    console.log('delete clicked', event, id);
     if (event === 'delete') {
       this.props.deletePost(id);
     }

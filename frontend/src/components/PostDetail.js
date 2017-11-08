@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { 
   writePost,
   updatePost,
+  rmPost,
 } from '../actions';
 import Comment from './Comment';
 import TextField from 'material-ui/TextField';
@@ -70,6 +71,11 @@ class PostDetail extends Component {
 
   doneEditing = () => {
     this.detailsToUpdate();
+    this.cancelPost();
+  }
+
+  deleteCurrentPost = () => {
+    this.props.removePost(this.state.id);
     this.cancelPost();
   }
 
@@ -175,6 +181,12 @@ class PostDetail extends Component {
             onClick={this.detailsToUpdate}>
             Save
           </Button>
+
+          <Button
+            raised
+            onClick={() => this.deleteCurrentPost()}>
+            Delete
+          </Button>
           
           <Button 
             raised 
@@ -202,6 +214,7 @@ const mapDispatchToProps = (dispatch) => (
   {
     insertPost: (data) => dispatch(writePost(data)),
     editPost  : (data) => dispatch(updatePost(data)),
+    removePost: (id) => dispatch(rmPost(id)),
   }
 );
 
