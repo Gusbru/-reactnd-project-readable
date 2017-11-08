@@ -32,32 +32,23 @@ class App extends Component {
   };
 
   componentWillMount() {
-    console.log("[App]component will mount");
     this.props.retrievePosts();
     this.props.retrieveCategories();
   };
   
 
   removePost = (id) => {
-
-    console.log('removing postId = ', id);
     if (!id) {
       return;
     }
     this.props.removePost(id);
   };
 
-  handlePostClick = (id, category) => {
-    console.log(id, category);
-  };
-
   upVote = (id) => {
-    console.log('botao voto up', id);
     this.props.voteUpPost(id);
   };
 
   downVote = (id) => {
-    console.log('botao voto down', id)
     this.props.voteDownPost(id);
   };
   
@@ -68,77 +59,70 @@ class App extends Component {
       item.name
     ))
   );
-
-  // fetchComment = (id) => {
-  //   this.props.retrieveComments(id);
-  // }
   
   render() {
-    //console.log('Props', this.props);
-
     return (
-      <BrowserRouter>
-        <div className="App">
-          <SimpleAppBar title="My Posts" categories={this.categories()}/>
+      <div className="App">
+        <SimpleAppBar title="My Posts" categories={this.categories()}/>
+        
+        <Switch>
           
-          <Switch>
-            
-            <Route
-              path='/create'
-              exact
-              render={() => (
-                <NewPost />
-              )}
-            />
+          <Route
+            path='/create'
+            exact
+            render={() => (
+              <NewPost />
+            )}
+          />
 
-            <Route
-              exact
-              path='/'
-              render={() => (
-                <PostList
-                  deletePost={this.removePost} 
-                  upVote={this.upVote}
-                  downVote={this.downVote} 
-                />
-            )}/>
-            
-            
-            
-            {
-              ['/', ...this.props.categoryList.map(item => '/'+item.path)].includes(this.props.location.pathname)
-              ? <Route 
-                  path='/:category'
-                  exact
-                  render={({ match }) => (
-                    <PostList
-                      match={match}
-                      deletePost={this.removePost} 
-                      upVote={this.upVote}
-                      downVote={this.downVote}
-                    />
-                  )}
-                />
+          <Route
+            exact
+            path='/'
+            render={() => (
+              <PostList
+                deletePost={this.removePost} 
+                upVote={this.upVote}
+                downVote={this.downVote} 
+              />
+          )}/>
+          
+          
+          
+          {
+            ['/', ...this.props.categoryList.map(item => '/'+item.path)].includes(this.props.location.pathname)
+            ? <Route 
+                path='/:category'
+                exact
+                render={({ match }) => (
+                  <PostList
+                    match={match}
+                    deletePost={this.removePost} 
+                    upVote={this.upVote}
+                    downVote={this.downVote}
+                  />
+                )}
+              />
 
-              : this.props.postList.map(item => '/'+item.category+'/'+item.id).includes(this.props.location.pathname)
-                  ? <Route 
-                      path='/:category/:postId'
-                      exact
-                      render={({ match }) => (
-                        <PostDetail 
-                          match={match}
-                          categoryList={this.props.categoryList}
-                          upVote={this.upVote}
-                          downVote={this.downVote}
-                        />
-                      )}
-                    />  
-                  : <Route component={NoMatch}/>
-            }
+            : this.props.postList.map(item => '/'+item.category+'/'+item.id).includes(this.props.location.pathname)
+                ? <Route 
+                    path='/:category/:postId'
+                    exact
+                    render={({ match }) => (
+                      <PostDetail 
+                        match={match}
+                        categoryList={this.props.categoryList}
+                        upVote={this.upVote}
+                        downVote={this.downVote}
+                      />
+                    )}
+                  />  
+                : <Route component={NoMatch}/>
+          }
 
 
-          </Switch>
-        </div>
-      </BrowserRouter>
+        </Switch>
+      </div>
+      
     );
   }
 }

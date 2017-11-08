@@ -74,7 +74,7 @@ class SimpleAppBar extends Component {
               <MenuItem 
                 key={category} 
                 component={Link}
-                to={category}
+                to={"/"+category}
                 onClick={event => this.handleRequestClose()}
               >
                 {category}
